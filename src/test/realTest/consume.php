@@ -45,7 +45,6 @@ function process_message($msg) {
     echo "\n--------\n";
     echo $msg->body;
     echo "\n--------\n";
-    var_dump($msg);
 }
 
 $rabbitQueue->consume('process_message', $CONSUMER_TAG);

@@ -41,6 +41,11 @@ class RABBIT_Message 												{
 				return $this->_body;
 			case 'delivery_info':
 				return $this->_arrDeliveryInfo;
+			case 'delivery_tag':
+				if(isset($this->_arrDeliveryInfo))
+					if(array_key_exists('delivery_tag',$this->_arrDeliveryInfo))
+						return $this->_arrDeliveryInfo['delivery_tag'];
+				throw new RABBIT_Exception_Message(sprintf(RABBIT_Exception_Message::ERROR_NO_PROPERTY, $name));
 			default:
 				if(array_key_exists($name,$this->_arrProperties))
 					return $this->_arrProperties[$name];

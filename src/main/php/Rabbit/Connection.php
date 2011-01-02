@@ -111,7 +111,7 @@ class RABBIT_Connection														{
 		$bPassive				= false;
 		$bExclusive				= false;
 		$bActive				= true;
-		if(!is_array($arrFlags))												{
+		if(is_array($arrFlags))												{
 			if(array_key_exists(RABBIT_Connection::B_AMQP_PASSIVE, 		$arrFlags))
 				$bPassive		= $arrFlags[RABBIT_Connection::B_AMQP_PASSIVE];
 			if(array_key_exists(RABBIT_Connection::B_AMQP_EXCLUSIVE, 	$arrFlags))
@@ -146,7 +146,7 @@ class RABBIT_Connection														{
 		$bPassive				= false;
 		$bExclusive				= false;
 		$bActive				= true;
-		if(!is_array($arrFlags))												{
+		if(is_array($arrFlags))												{
 			if(array_key_exists(RABBIT_Connection::B_AMQP_PASSIVE, 		$arrFlags))
 				$bPassive		= $arrFlags[RABBIT_Connection::B_AMQP_PASSIVE];
 			if(array_key_exists(RABBIT_Connection::B_AMQP_EXCLUSIVE, 	$arrFlags))

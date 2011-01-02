@@ -48,7 +48,7 @@ class RABBIT_Queue																{
 		$bDurable				= true;
 		$bAutoDelete			= false;
 		$bExclusive				= false;
-		if(!is_array($arrFlags))												{
+		if(is_array($arrFlags))												{
 			if(array_key_exists(RABBIT_Connection::B_AMQP_PASSIVE, 		$arrFlags))
 				$bPassive		= $arrFlags[RABBIT_Connection::B_AMQP_PASSIVE];
 			if(array_key_exists(RABBIT_Connection::B_AMQP_DURABLE, 		$arrFlags))
@@ -61,7 +61,8 @@ class RABBIT_Queue																{
 		$this->_amqpChannel->queue_declare($this->_strQueueName, $bPassive, $bDurable, $bExclusive, $bAutoDelete);
 								}
 	private function ack(RABBIT_Message $msg)									{
-		$strDeliveryTag			= $msg->delivery_info['delivery_tag'];
+	
+		$strDeliveryTag			= $msg->delivery_tag;
 		$this->_amqpChannel->basic_ack($strDeliveryTag);
 	}
 	public function bind($strExchangeName, $strRoutingKey 		= null)			{
@@ -94,7 +95,7 @@ class RABBIT_Queue																{
 		 *	@purpose:	This is the "generic callback" which is called by the Channel
 		 *				This handles the message acknowledge 
 		 */
-		$this->_amqpChannel->basic_ack($msg);
+		$this->ack($msg);
 
 		// Cancel callback
 		if (self::MESSAGE_CONSUME_CANCEL	=== $msg->body) 
