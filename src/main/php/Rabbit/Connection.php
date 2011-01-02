@@ -124,7 +124,7 @@ class RABBIT_Connection														{
 			$this->connect();
 		$amqpChannel 	= $this->_amqpConnection->channel();
 		$amqpChannel->access_request($this->_strVHost, $bExclusive, $bPassive, $bActive, true);
-		return new RABBIT_Exchange($amqpChannel, $strName, $strType, $flags);
+		return new RABBIT_Exchange($amqpChannel, $strName, $strType, $arrFlags);
 								}
 	public function getQueue(		$strName		= null
 							,		$arrFlags		= null)					{

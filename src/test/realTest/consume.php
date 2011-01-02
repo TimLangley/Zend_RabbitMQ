@@ -16,8 +16,8 @@ $paths = array(	get_include_path(),
 				realpath(dirname(__FILE__)).'/../../../target/phpinc',
 				'.');
 set_include_path(implode(PATH_SEPARATOR, $paths));
-
-defined('APPLICATION_ENV')		or define('APPLICATION_ENV', 	ENVIRONMENT_UNIT_TEST);
+define('ENVIRONMENT_UNIT_TEST', 'unit-test');
+defined('APPLICATION_ENV')		or define('APPLICATION_ENV', ENVIRONMENT_UNIT_TEST);
 defined('APPLICATION_PATH') 	or define('APPLICATION_PATH', 	realpath(dirname(__FILE__)).'/../../main/php/Rabbit');
 
 require_once "Zend/Loader/Autoloader.php";
