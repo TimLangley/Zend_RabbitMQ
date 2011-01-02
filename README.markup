@@ -1,0 +1,3 @@
+This set of Zend classes are designed to connect to a RabbitMQ server (although they should be able to connect to any server which runs the AMQP 0.8 protocol)
+
+This code is very closely based on the php-amqplib code (however with more of a "Zend" look and feel)
