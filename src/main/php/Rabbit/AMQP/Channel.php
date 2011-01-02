@@ -129,14 +129,14 @@ class RABBIT_AMQP_Channel extends RABBIT_AMQP_Abstract				{
 	protected function open_ok($args)								{
 		$this->is_open = true;
 	}
-	public function access_request(	$realm, 
+	public function access_request(	$strVHost, 
 									$exclusive	= false,
 									$passive	= false, 
 									$active		= false, 
 									$write		= false, 
 									$read		= false)			{
 		$args = new RABBIT_AMQP_Serialize_Write();
-		$args->write_shortstr($realm);
+		$args->write_shortstr($strVHost);
 		$args->write_bit($exclusive);
 		$args->write_bit($passive);
 		$args->write_bit($active);
@@ -355,7 +355,7 @@ class RABBIT_AMQP_Channel extends RABBIT_AMQP_Abstract				{
 		if(array_key_exists($consumer_tag, $this->callbacks))		{
 			$rabbitQueue				= $this->callbacks[$consumer_tag]["Queue"];
 			$callback					= $this->callbacks[$consumer_tag]["Callback"];
-			$rabbitQueue->callbackConsume($msg, $callback);
+			$rabbitQueue->_consume_cb($msg, $callback);
 		}
 	}
 	public function basic_get($queue="", $no_ack=false, $ticket=null){

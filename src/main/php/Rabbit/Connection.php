@@ -14,6 +14,13 @@ class RABBIT_Connection														{
 	const	DEFAULT_USER				= "guest";
 	const	DEFAULT_PASSWORD			= "guest";
 	
+	const	B_AMQP_ACTIVE				= "CONN_Active";
+	const	B_AMQP_AUTODELETE			= "CONN_AutoDelete";
+	const	B_AMQP_DURABLE				= "CONN_Durable";
+	const	B_AMQP_EXCLUSIVE			= "CONN_Exclusive";
+	const	B_AMQP_PASSIVE				= "CONN_Passive";
+	
+	
 	private $_strHost					= self::DEFAULT_HOST;
 	private $_strVHost					= self::DEFAULT_VHOST;
 	private $_intPort					= self::DEFAULT_PORT;
@@ -52,7 +59,7 @@ class RABBIT_Connection														{
 	public function connect()												{
 		/**
 		 *	@purpose:	Connects to the AMQP instance
-		 *	@return:	true | false
+		 *	@return:	true || exception
 		 */
 		$this->_amqpConnection			= new RABBIT_AMQP_Connection($this->_strHost
 																	,$this->_intPort
@@ -60,43 +67,101 @@ class RABBIT_Connection														{
 																	,$this->_strPassword
 																	,$this->_strVHost
 																	);
+		return true;
 	}
 	public function close()													{
-		$this->disconnect();
+		/**
+		 *	@purpose:	Synonym for $this->disconnect();
+		 */
+		return $this->disconnect();
 	}
 	public function disconnect()											{
 		/**
-		 *	@purpose:	
+		 *	@purpose:	Disconnects from the AMQP server and closes any connections
+		 *	@return:	true
 		 */
 		if($this->_amqpConnection)
 			$this->_amqpConnection->close();
 		$this->_amqpConnection			= null;
+		return true;
 	}
 	public function getExchange(	$strName		= null
 								, 	$strType 		= null
-								, 	$flags 			= null)					{
+								, 	$arrFlags 		= null)					{
 		/**
 		 *	@purpose:	Returns a new RABBIT_Exchange (either creating or finding existing from the server)
+		 *	@param:		strName		The Exchange Name
+		 *	@param:		strType		The type of Exchange (direct | fanout | topic 
+		 *									- taken from RABBIT_Exchange::EXCHANGE_TYPE)
+		 *	@param:		arrFlags	Associative array of flags
+		 *								
+		 *								"B_AMQP_PASSIVE"	=> Check if Exchange exists
+		 *														Passive exchanges are queues will not be redeclared,
+		 *														the broker will throw an error if the exchange does not exist.
+		 *								"B_AMQP_DURABLE"	=> Durable exchanges and queues will survive a broker restart,
+		 *														complete with all of their data.
+		 *								"B_AMQP_AUTODELETE"	=> For exchanges, the auto delete flag indicates that the exchange will 
+		 *														be deleted as soon as no more queues are bound to it. 
+		 *														If no queues were ever bound the exchange, 
+		 *														the exchange will never be deleted
+		 *								"B_AMQP_EXCLUSIVE"	=>	Only ONE client can connect to this queue (? not valid for exchanges?)
+		 *								"B_AMQP_ACTIVE"		=> 	?? (no idea!)
 		 */
+	
+		$bPassive				= false;
+		$bExclusive				= false;
+		$bActive				= true;
+		if(!is_array($arrFlags))												{
+			if(array_key_exists(RABBIT_Connection::B_AMQP_PASSIVE, 		$arrFlags))
+				$bPassive		= $arrFlags[RABBIT_Connection::B_AMQP_PASSIVE];
+			if(array_key_exists(RABBIT_Connection::B_AMQP_EXCLUSIVE, 	$arrFlags))
+				$bExclusive		= $arrFlags[RABBIT_Connection::B_AMQP_EXCLUSIVE];
+			if(array_key_exists(RABBIT_Connection::B_AMQP_ACTIVE, 		$arrFlags))
+				$bActive		= $arrFlags[RABBIT_Connection::B_AMQP_ACTIVE];
+		}
+		
 		if(!$this->isConnected())
 			$this->connect();
 		$amqpChannel 	= $this->_amqpConnection->channel();
-		$amqpChannel->access_request($this->_strVHost, false, false, true, true);
+		$amqpChannel->access_request($this->_strVHost, $bExclusive, $bPassive, $bActive, true);
 		return new RABBIT_Exchange($amqpChannel, $strName, $strType, $flags);
 								}
-	public function getQueue(		$strName		= null)					{
+	public function getQueue(		$strName		= null
+							,		$arrFlags		= null)					{
 		/**
 		 *	@purpose:	Returns a new RABBIT_Queue (either creating or finding existing from the server)
+		 *	@param:		$strName		The Queue Name
+		 * 	@param:		$arrFlags		Associative Array of flags
+		 *								
+		 *								"B_AMQP_PASSIVE"	=> Check if Queue exists
+		 *														Passive queues will not be redeclared,
+		 *														the broker will throw an error if the queue does not exist
+		 *								"B_AMQP_EXCLUSIVE"	=>	Only ONE client can connect to this queue (? not valid for exchanges?)
+		 *								"B_AMQP_ACTIVE"		=> 	?? (no idea!)
 		 */
 		if(!$this->isConnected())
 			$this->connect();
 		$amqpChannel 	= $this->_amqpConnection->channel();
-		$amqpChannel->access_request($this->_strVHost, false, false, true, true);
-		return new RABBIT_Queue($amqpChannel, $strName);
-	}
+		
+		$bPassive				= false;
+		$bExclusive				= false;
+		$bActive				= true;
+		if(!is_array($arrFlags))												{
+			if(array_key_exists(RABBIT_Connection::B_AMQP_PASSIVE, 		$arrFlags))
+				$bPassive		= $arrFlags[RABBIT_Connection::B_AMQP_PASSIVE];
+			if(array_key_exists(RABBIT_Connection::B_AMQP_EXCLUSIVE, 	$arrFlags))
+				$bExclusive		= $arrFlags[RABBIT_Connection::B_AMQP_EXCLUSIVE];
+			if(array_key_exists(RABBIT_Connection::B_AMQP_ACTIVE, 		$arrFlags))
+				$bActive		= $arrFlags[RABBIT_Connection::B_AMQP_ACTIVE];
+		}
+		
+		$amqpChannel->access_request($this->_strVHost, $bExclusive, $bPassive, $bActive, false);
+		return new RABBIT_Queue($amqpChannel, $strName, $arrFlags);
+							}
 	public function isConnected()											{
 		/**
 		 *	@purpose:	Returns true | false whether we're currently connected
+		 *	@return:	true | false
 		 */
 		return (!is_null($this->_amqpConnection));
 	}

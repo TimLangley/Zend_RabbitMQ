@@ -34,7 +34,7 @@ $arrOptions = array(  "host"    => "localhost"
 
 $EXCHANGE 		  = 'newExchange-fan';
 $QUEUE 			    = isset($argv[1])?$argv[1]:'msgs';
-$CONSUMER_TAG 	= $QUEUE; //'consumer';
+$CONSUMER_TAG 	= $QUEUE;
 
 $rabbitConn     = new RABBIT_Connection($arrOptions);
 $rabbitQueue    = $rabbitConn->getQueue($QUEUE);
@@ -45,6 +45,7 @@ function process_message($msg) {
     echo "\n--------\n";
     echo $msg->body;
     echo "\n--------\n";
+    var_dump($msg);
 }
 
 $rabbitQueue->consume('process_message', $CONSUMER_TAG);

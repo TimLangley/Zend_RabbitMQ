@@ -24,15 +24,17 @@ class RABBIT_AMQP_Connection extends RABBIT_AMQP_Abstract				{
         "10,61" => "close_ok"
     );
     
-    public function __construct($host, $port,
-                                $user, $password,
-                                $vhost="/",
-								$insist=false,
-                                $login_method="AMQPLAIN",
-                                $login_response=NULL,
-                                $locale="en_US",
-                                $connection_timeout = 3,
-                                $read_write_timeout = 3)
+    public function __construct ( $host
+								, $port
+								, $user
+								, $password
+								, $vhost				= "/"
+								, $insist				= false
+								, $login_method			= "AMQPLAIN"
+								, $login_response		= null
+								, $locale				= "en_US"
+								, $connection_timeout 	= 3
+								, $read_write_timeout 	= 3)
     {
         if($user && $password)
         {
@@ -41,7 +43,7 @@ class RABBIT_AMQP_Connection extends RABBIT_AMQP_Abstract				{
                                                "PASSWORD" => array('S',$password)));
             $login_response = substr($login_response->getvalue(),4); //Skip the length
         } else
-            $login_response = NULL;
+            $login_response = null;
         
 
         $d = RABBIT_AMQP_Connection::$LIBRARY_PROPERTIES;
@@ -54,8 +56,8 @@ class RABBIT_AMQP_Connection extends RABBIT_AMQP_Abstract				{
             $this->channel_max = 65535;
             $this->frame_max = 131072;
 
-            $errstr = $errno = NULL;
-            $this->sock = NULL;
+            $errstr = $errno = null;
+            $this->sock = null;
             if (!($this->sock = fsockopen($host,$port,$errno,$errstr,$connection_timeout)))
             {
                 throw new Exception("Error Connecting to server($errno): $errstr ");
@@ -82,7 +84,7 @@ class RABBIT_AMQP_Connection extends RABBIT_AMQP_Abstract				{
             if(!$host)
                 return; // we weren't redirected
 
-            @fclose($this->sock); $this->sock=NULL;
+            @fclose($this->sock); $this->sock=null;
         }
     }
    
@@ -119,13 +121,13 @@ class RABBIT_AMQP_Connection extends RABBIT_AMQP_Abstract				{
             if($this->input)
             {
                 $this->input->close();
-                $this->input = NULL;
+                $this->input = null;
             }
         
         if($this->sock)
         {
             @fclose($this->sock);
-            $this->sock = NULL;
+            $this->sock = null;
         }
     }
 
@@ -241,7 +243,7 @@ class RABBIT_AMQP_Connection extends RABBIT_AMQP_Abstract				{
      * Fetch a Channel object identified by the numeric channel_id, or
      * create that object if it doesn't already exist.
      */
-    public function channel($channel_id=NULL)
+    public function channel($channel_id=null)
     {
         if(array_key_exists($channel_id,$this->channels))
             return $this->channels[$channel_id];
@@ -253,7 +255,7 @@ class RABBIT_AMQP_Connection extends RABBIT_AMQP_Abstract				{
      * request a connection close
      */
     public function close($reply_code=0, $reply_text="", $method_sig=array(0, 0))
-    {	
+    {
         $args = new RABBIT_AMQP_Serialize_Write();
         $args->write_short($reply_code);
         $args->write_shortstr($reply_text);
@@ -315,7 +317,7 @@ class RABBIT_AMQP_Connection extends RABBIT_AMQP_Abstract				{
     {
         $this->known_hosts = $args->read_shortstr();
         
-        return NULL;
+        return null;
     }
 
 

@@ -9,5 +9,3 @@
 class RABBIT_Exception_Message extends RABBIT_Exception {
 	const ERROR_NO_PROPERTY		= "No such property: %s";
 }
-
-//RABBIT_Exception_Message(RABBIT_Exception_Message::ERROR_NO_PROPERTY)

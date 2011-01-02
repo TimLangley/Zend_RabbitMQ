@@ -51,7 +51,7 @@
 				<version>${phpmaven.version}</version>
 				<configuration>
 					<compileArgs>-d auto_prepend_file=${basedir}/registerautoload.php</compileArgs>
-					<ignoreValidate>false</ignoreValidate>
+					<ignoreValidate>true</ignoreValidate>
 				</configuration>
 			</plugin>
 			<!-- The actual assembly / install phase -->
@@ -123,6 +123,14 @@
 			                </successCodes>
 			            </configuration>
 			        </execution>
+			
+			This belongs below with the phpunit - but it's not working at moment
+			PROBABLY BECAUSE - No tests => no coverage material
+			<argument>- -coverage-clover</argument>
+            <argument>${project.build.directory}/reports/clover.xml</argument>
+		
+            <argument>- -coverage-html</argument>
+            <argument>${project.build.directory}/reports/coverage/</argument>
 		-->
 		        	<execution>
 			            <id>phpunit</id>
@@ -133,13 +141,7 @@
 			            <configuration>
 			                <executable>phpunit</executable>
 			                <arguments>
-			                    <argument>--coverage-clover</argument>
-			                    <argument>${project.build.directory}/reports/clover.xml</argument>
-
-			                    <argument>--coverage-html</argument>
-			                    <argument>${project.build.directory}/reports/coverage/</argument>
-
-			                    <argument>-dmemory_limit=100M</argument>
+			                <argument>-dmemory_limit=100M</argument>
 
 			                    <!-- Properly set include path and autoloader to allow everything to work -->
 			                    <argument>--bootstrap</argument>

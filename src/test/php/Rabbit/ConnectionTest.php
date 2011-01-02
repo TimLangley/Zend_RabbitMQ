@@ -7,5 +7,7 @@
  * @author     Tim Langley
  */
 class RABBIT_ConnectionTest extends PHPUnit_Framework_TestCase	{
-	
+	public function testSkipAll()								{
+		$this->markTestSkipped("Need to create unit testing framework for this");
+	}
 }
