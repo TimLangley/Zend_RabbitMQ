@@ -7,7 +7,7 @@
  * @author     Tim Langley
  */
 
-class RABBIT_Exception extends Exception {
+class Rabbit_Exception extends Exception {
 	const	ERROR_CONNECTING				= "Error Connecting to server(%d): %s";
 	const 	ERROR_SERIALIZE_BC_MATH			= "'bc math' module required";
 	const 	ERROR_SERIALIZE_EXPONENT		= "Decimal exponent value must be unsigned!";

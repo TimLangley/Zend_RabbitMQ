@@ -7,7 +7,7 @@
  * @author     Tim Langley
  */
 
-class RABBIT_Message 												{
+class Rabbit_Message 												{
 	protected static $_arrProperyTypes = array(	"content_type" 			=> "shortstr",
 												"content_encoding" 		=> "shortstr",
 												"application_headers" 	=> "table",
@@ -45,14 +45,14 @@ class RABBIT_Message 												{
 				if(isset($this->_arrDeliveryInfo))
 					if(array_key_exists('delivery_tag',$this->_arrDeliveryInfo))
 						return $this->_arrDeliveryInfo['delivery_tag'];
-				throw new RABBIT_Exception_Message(sprintf(RABBIT_Exception_Message::ERROR_NO_PROPERTY, $name));
+				throw new Rabbit_Exception_Message(sprintf(Rabbit_Exception_Message::ERROR_NO_PROPERTY, $name));
 			default:
 				if(array_key_exists($name,$this->_arrProperties))
 					return $this->_arrProperties[$name];
 				if(isset($this->_arrDeliveryInfo))
 					if(array_key_exists($name,$this->_arrDeliveryInfo))
 						return $this->_arrDeliveryInfo[$name];
-				throw new RABBIT_Exception_Message(sprintf(RABBIT_Exception_Message::ERROR_NO_PROPERTY, $name));
+				throw new Rabbit_Exception_Message(sprintf(Rabbit_Exception_Message::ERROR_NO_PROPERTY, $name));
 		}
 	}
 	public function __set($name, $value)							{
@@ -62,7 +62,7 @@ class RABBIT_Message 												{
 			case 'delivery_info':
 				return $this->_arrDeliveryInfo	= $value;
 			default:
-				throw new RABBIT_Exception_Message(sprintf(RABBIT_Exception_Message::ERROR_NO_PROPERTY, $name));
+				throw new Rabbit_Exception_Message(sprintf(Rabbit_Exception_Message::ERROR_NO_PROPERTY, $name));
 		}
 	}
 	public function load_properties($raw_bytes)						{
@@ -72,7 +72,7 @@ class RABBIT_Message 												{
 		* into a dictionary stored in this object as an attribute named
 		* 'properties'.
 		*/
-		$r 						= new RABBIT_AMQP_Serialize_Read($raw_bytes);
+		$r 						= new Rabbit_AMQP_Serialize_Read($raw_bytes);
 		// Read 16-bit shorts until we get one with a low bit set to zero
 		$flags 					= array();
 		while(true)													{
@@ -105,7 +105,7 @@ class RABBIT_Message 												{
 		$shift 					= 15;
 		$flag_bits 				= 0;
 		$flags 					= array();
-		$raw_bytes 				= new RABBIT_AMQP_Serialize_Write();
+		$raw_bytes 				= new Rabbit_AMQP_Serialize_Write();
 		foreach (self::$_arrProperyTypes as $key => $proptype)		{
 			$val 				= (array_key_exists($key,$this->_arrProperties))?$this->_arrProperties[$key]:null;
 			if(!is_null($val))										{
@@ -121,7 +121,7 @@ class RABBIT_Message 												{
 			$shift 				-= 1;
 		}
 		array_push($flags, $flag_bits);
-		$result 				= new RABBIT_AMQP_Serialize_Write();
+		$result 				= new Rabbit_AMQP_Serialize_Write();
 		foreach($flags as $flag_bits)
 			$result->write_short($flag_bits);
 		$result->write($raw_bytes->getvalue());

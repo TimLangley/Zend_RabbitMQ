@@ -7,7 +7,7 @@
  * @author     Tim Langley
  */
 
-class RABBIT_Exception_Connection extends RABBIT_Exception {
+class Rabbit_Exception_Connection extends Rabbit_Exception {
 	const	ERROR_NOT_CONNECTED		= "Must be connected";
 }
 

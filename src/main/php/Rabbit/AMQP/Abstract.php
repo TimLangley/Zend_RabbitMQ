@@ -7,7 +7,7 @@
  * @author     Tim Langley
  */
 
-class RABBIT_AMQP_Abstract											{
+class Rabbit_AMQP_Abstract											{
 	private static $CONTENT_METHODS = array(
 		"60,60", // Basic.deliver
 		"60,71", // Basic.get_ok
@@ -107,11 +107,11 @@ class RABBIT_AMQP_Abstract											{
 		$payload 			= $frm[1];
 		if($frame_type 		!= 2)
 			throw new Exception("Expecting Content header");
-		$payload_reader 	= new RABBIT_AMQP_Serialize_Read(substr($payload,0,12));
+		$payload_reader 	= new Rabbit_AMQP_Serialize_Read(substr($payload,0,12));
 		$class_id 			= $payload_reader->read_short();
 		$weight 			= $payload_reader->read_short();
 		$body_size 			= $payload_reader->read_longlong();
-		$msg 				= new RABBIT_Message();
+		$msg 				= new Rabbit_Message();
 		$msg->load_properties(substr($payload,12));
 		$body_parts 		= array();
 		$body_received 		= 0;
@@ -156,14 +156,14 @@ class RABBIT_AMQP_Abstract											{
 				throw new Exception("Method frame too short");
 			$method_sig_array = unpack("n2", substr($payload,0,4));
 			$method_sig = "" . $method_sig_array[1] . "," . $method_sig_array[2]; 
-			$args = new RABBIT_AMQP_Serialize_Read(substr($payload,4));
-			if(in_array($method_sig, RABBIT_AMQP_Abstract::$CONTENT_METHODS))
+			$args = new Rabbit_AMQP_Serialize_Read(substr($payload,4));
+			if(in_array($method_sig, Rabbit_AMQP_Abstract::$CONTENT_METHODS))
 				$content = $this->wait_content();
 			else
 				$content = null;
 			if($allowed_methods==null ||
 				in_array($method_sig,$allowed_methods) ||
-				in_array($method_sig,RABBIT_AMQP_Abstract::$CLOSE_METHODS))
+				in_array($method_sig,Rabbit_AMQP_Abstract::$CLOSE_METHODS))
 					return $this->dispatch($method_sig, $args, $content);
 			array_push($this->method_queue,array($method_sig, $args, $content));
 		}

@@ -8,7 +8,7 @@
  */
 
 
-class RABBIT_AMQP_Serialize_Read							{
+class Rabbit_AMQP_Serialize_Read							{
 	private $offset		= 0;
 	private $bitcount	= 0;
 	private $bits		= 0;
@@ -26,7 +26,7 @@ class RABBIT_AMQP_Serialize_Read							{
 			$this->is64bits = true;
 
 		if(!function_exists("bcmul"))
-			throw new RABBIT_Exception(RABBIT_Exception::ERROR_SERIALIZE_BC_MATH);
+			throw new Rabbit_Exception(Rabbit_Exception::ERROR_SERIALIZE_BC_MATH);
 	}
 	public function close()							{
 		if($this->sock)
@@ -45,11 +45,11 @@ class RABBIT_AMQP_Serialize_Read							{
 				$res .= $buf;
 			}
 			if(strlen($res)!=$n)
-				throw new RABBIT_Exception(sprintf(RABBIT_Exception::ERROR_SERIALIZE_READING,strlen($res),$n));
+				throw new Rabbit_Exception(sprintf(Rabbit_Exception::ERROR_SERIALIZE_READING,strlen($res),$n));
 			$this->offset += $n;
 		} else 										{
 			if(strlen($this->str) < $n)
-				throw new RABBIT_Exception(sprintf(RABBIT_Exception::ERROR_SERIALIZE_READING,strlen($this->str),$n));
+				throw new Rabbit_Exception(sprintf(Rabbit_Exception::ERROR_SERIALIZE_READING,strlen($this->str),$n));
 			$res = substr($this->str,0,$n);
 			$this->str = substr($this->str,$n);
 			$this->offset += $n;
@@ -140,7 +140,7 @@ class RABBIT_AMQP_Serialize_Read							{
 		$this->bitcount = $this->bits = 0;
 		$slen = $this->read_php_int();
 		if($slen<0)
-			throw new RABBIT_Exception(RABBIT_Exception::ERROR_SERIALIZE_STRING_TOO_LONG);
+			throw new Rabbit_Exception(Rabbit_Exception::ERROR_SERIALIZE_STRING_TOO_LONG);
 		return $this->rawread($slen);
 	}
 	function read_timestamp()						{
@@ -158,8 +158,8 @@ class RABBIT_AMQP_Serialize_Read							{
 		$this->bitcount = $this->bits = 0;
 		$tlen = $this->read_php_int();
 		if($tlen<0)
-			throw new RABBIT_Exception(RABBIT_Exception::ERROR_SERIALIZE_TABLE);
-		$table_data = new RABBIT_AMQP_Serialize_Read($this->rawread($tlen));
+			throw new Rabbit_Exception(Rabbit_Exception::ERROR_SERIALIZE_TABLE);
+		$table_data = new Rabbit_AMQP_Serialize_Read($this->rawread($tlen));
 		$result = array();
 		while($table_data->tell() < $tlen)			{
 			$name = $table_data->read_shortstr();
@@ -171,7 +171,7 @@ class RABBIT_AMQP_Serialize_Read							{
 			} else if($ftype == 'D')				{
 				$e = $table_data->read_octet();
 				$n = $table_data->read_signed_long();
-				$val = new RABBIT_AMQP_Serialize_Decimal($n, $e);
+				$val = new Rabbit_AMQP_Serialize_Decimal($n, $e);
 			} else if($ftype == 'T')				{
 				$val = $table_data->read_timestamp();
 			} else if($ftype == 'F')				{

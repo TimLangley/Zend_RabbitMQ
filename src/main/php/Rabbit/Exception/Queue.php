@@ -6,7 +6,7 @@
  * @license    
  * @author     Tim Langley
  */
-class RABBIT_Exception_Queue extends RABBIT_Exception {
-	const ERROR_CHANNEL_EMPTY		= "Channel can't be null - use RABBIT_Connection->getQueue()";
+class Rabbit_Exception_Queue extends Rabbit_Exception {
+	const ERROR_CHANNEL_EMPTY		= "Channel can't be null - use Rabbit_Connection->getQueue()";
 	const ERROR_QUEUE_NAME_EMPTY	= "Queue name can't be empty";
 }

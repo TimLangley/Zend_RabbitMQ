@@ -7,7 +7,7 @@
  * @author     Tim Langley
  */
 
-class RABBIT_AMQP_Connection extends RABBIT_AMQP_Abstract				{
+class Rabbit_AMQP_Connection extends Rabbit_AMQP_Abstract				{
     public static $AMQP_PROTOCOL_HEADER = "AMQP\x01\x01\x09\x01";
     public static $LIBRARY_PROPERTIES = array(
         "library" => array('S', "PHP Simple AMQP lib"),
@@ -38,7 +38,7 @@ class RABBIT_AMQP_Connection extends RABBIT_AMQP_Abstract				{
     {
         if($user && $password)
         {
-            $login_response = new RABBIT_AMQP_Serialize_Write();
+            $login_response = new Rabbit_AMQP_Serialize_Write();
             $login_response->write_table(array("LOGIN" => array('S',$user),
                                                "PASSWORD" => array('S',$password)));
             $login_response = substr($login_response->getvalue(),4); //Skip the length
@@ -46,7 +46,7 @@ class RABBIT_AMQP_Connection extends RABBIT_AMQP_Abstract				{
             $login_response = null;
         
 
-        $d = RABBIT_AMQP_Connection::$LIBRARY_PROPERTIES;
+        $d = Rabbit_AMQP_Connection::$LIBRARY_PROPERTIES;
         while(true)
         {
             $this->channels = array();
@@ -65,9 +65,9 @@ class RABBIT_AMQP_Connection extends RABBIT_AMQP_Abstract				{
             
             stream_set_timeout($this->sock, $read_write_timeout);
             stream_set_blocking($this->sock, 1);
-            $this->input = new RABBIT_AMQP_Serialize_Read(null, $this->sock);
+            $this->input = new Rabbit_AMQP_Serialize_Read(null, $this->sock);
 
-            $this->write(RABBIT_AMQP_Connection::$AMQP_PROTOCOL_HEADER);
+            $this->write(Rabbit_AMQP_Connection::$AMQP_PROTOCOL_HEADER);
             $this->wait(array("10,10"));        
             $this->x_start_ok($d, $login_method, $login_response, $locale);
         
@@ -142,7 +142,7 @@ class RABBIT_AMQP_Connection extends RABBIT_AMQP_Abstract				{
     public function send_content($channel, $class_id, $weight, $body_size,
                         $packed_properties, $body)
     {
-        $pkt = new RABBIT_AMQP_Serialize_Write();
+        $pkt = new Rabbit_AMQP_Serialize_Write();
 
         $pkt->write_octet(2);
         $pkt->write_short($channel);
@@ -161,7 +161,7 @@ class RABBIT_AMQP_Connection extends RABBIT_AMQP_Abstract				{
         {
             $payload = substr($body,0, $this->frame_max-8);
             $body = substr($body,$this->frame_max-8);
-            $pkt = new RABBIT_AMQP_Serialize_Write();
+            $pkt = new Rabbit_AMQP_Serialize_Write();
 
             $pkt->write_octet(3);
             $pkt->write_short($channel);
@@ -177,10 +177,10 @@ class RABBIT_AMQP_Connection extends RABBIT_AMQP_Abstract				{
 
     protected function send_channel_method_frame($channel, $method_sig, $args="")
     {
-        if($args instanceof RABBIT_AMQP_Serialize_Write)
+        if($args instanceof Rabbit_AMQP_Serialize_Write)
             $args = $args->getvalue();
 
-        $pkt = new RABBIT_AMQP_Serialize_Write();
+        $pkt = new Rabbit_AMQP_Serialize_Write();
 
         $pkt->write_octet(1);
         $pkt->write_short($channel);
@@ -248,7 +248,7 @@ class RABBIT_AMQP_Connection extends RABBIT_AMQP_Abstract				{
         if(array_key_exists($channel_id,$this->channels))
             return $this->channels[$channel_id];
         
-        return new RABBIT_AMQP_Channel($this->connection, $channel_id);
+        return new Rabbit_AMQP_Channel($this->connection, $channel_id);
     }
 
     /**
@@ -256,7 +256,7 @@ class RABBIT_AMQP_Connection extends RABBIT_AMQP_Abstract				{
      */
     public function close($reply_code=0, $reply_text="", $method_sig=array(0, 0))
     {
-        $args = new RABBIT_AMQP_Serialize_Write();
+        $args = new Rabbit_AMQP_Serialize_Write();
         $args->write_short($reply_code);
         $args->write_shortstr($reply_text);
         $args->write_short($method_sig[0]); // class_id
@@ -275,7 +275,7 @@ class RABBIT_AMQP_Connection extends RABBIT_AMQP_Abstract				{
         $this->x_close_ok();
         
         throw new Exception($reply_text);
-			//RABBIT_AMQP_ConnectionException($reply_code, $reply_text, array($class_id, $method_id));
+			//Rabbit_AMQP_ConnectionException($reply_code, $reply_text, array($class_id, $method_id));
     }
 
 
@@ -298,7 +298,7 @@ class RABBIT_AMQP_Connection extends RABBIT_AMQP_Abstract				{
 
     protected function x_open($virtual_host, $capabilities="", $insist=false)
     {
-        $args = new RABBIT_AMQP_Serialize_Write();
+        $args = new Rabbit_AMQP_Serialize_Write();
         $args->write_shortstr($virtual_host);
         $args->write_shortstr($capabilities);
         $args->write_bit($insist);
@@ -345,7 +345,7 @@ class RABBIT_AMQP_Connection extends RABBIT_AMQP_Abstract				{
      */
     protected function x_secure_ok($response)
     {
-        $args = new RABBIT_AMQP_Serialize_Write();
+        $args = new Rabbit_AMQP_Serialize_Write();
         $args->write_longstr($response);
         $this->send_method_frame(array(10, 21), $args);
     }
@@ -365,7 +365,7 @@ class RABBIT_AMQP_Connection extends RABBIT_AMQP_Abstract				{
     
     protected function x_start_ok($client_properties, $mechanism, $response, $locale)
     {
-        $args = new RABBIT_AMQP_Serialize_Write();
+        $args = new Rabbit_AMQP_Serialize_Write();
         $args->write_table($client_properties);
         $args->write_shortstr($mechanism);
         $args->write_longstr($response);
@@ -394,7 +394,7 @@ class RABBIT_AMQP_Connection extends RABBIT_AMQP_Abstract				{
      */
     protected function x_tune_ok($channel_max, $frame_max, $heartbeat)
     {
-        $args = new RABBIT_AMQP_Serialize_Write();
+        $args = new Rabbit_AMQP_Serialize_Write();
         $args->write_short($channel_max);
         $args->write_long($frame_max);
         $args->write_short($heartbeat);

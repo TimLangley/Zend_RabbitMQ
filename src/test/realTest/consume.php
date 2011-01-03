@@ -8,10 +8,10 @@
  * @author     Tim Langley
  */
 
-define('RABBIT_PATH', 		realpath(dirname(__FILE__)).'/../../main/php/Rabbit');
+define('Rabbit_PATH', 		realpath(dirname(__FILE__)).'/../../main/php/Rabbit');
 
 $paths = array(	get_include_path(),
-				RABBIT_PATH,
+				Rabbit_PATH,
 				realpath(dirname(__FILE__)).'/../../main/php',
 				realpath(dirname(__FILE__)).'/../../../target/phpinc',
 				'.');
@@ -24,7 +24,7 @@ require_once "Zend/Loader/Autoloader.php";
 $autoloader = Zend_Loader_Autoloader::getInstance();
 $autoloader->registerNamespace('PHPUnit_');
 $autoloader->registerNamespace('Zend_');
-$autoloader->registerNamespace('RABBIT_');
+$autoloader->registerNamespace('Rabbit_');
 
 $arrOptions = array(  "host"    => "localhost"
                    ,  "vhost"   => "/"
@@ -36,9 +36,9 @@ $EXCHANGE 		  = 'newExchange-fan';
 $QUEUE 			    = isset($argv[1])?$argv[1]:'msgs';
 $CONSUMER_TAG 	= $QUEUE;
 
-$rabbitConn     = new RABBIT_Connection($arrOptions);
+$rabbitConn     = new Rabbit_Connection($arrOptions);
 $rabbitQueue    = $rabbitConn->getQueue($QUEUE);
-$rabbitExchange = $rabbitConn->getExchange($EXCHANGE, RABBIT_Exchange::EXCHANGE_TYPE_FANOUT);
+$rabbitExchange = $rabbitConn->getExchange($EXCHANGE, Rabbit_Exchange::EXCHANGE_TYPE_FANOUT);
 $rabbitQueue->bind($EXCHANGE);
 
 function process_message($msg) {

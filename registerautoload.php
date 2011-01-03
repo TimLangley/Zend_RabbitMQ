@@ -20,7 +20,7 @@ require_once "Zend/Loader/Autoloader.php";
 $autoloader = Zend_Loader_Autoloader::getInstance();
 $autoloader->registerNamespace('PHPUnit_');
 $autoloader->registerNamespace('Zend_');
-$autoloader->registerNamespace('RABBIT_');
+$autoloader->registerNamespace('Rabbit_');
 
 PHPUnit_Util_Filter::addDirectoryToWhitelist(RABBIT_PATH);
 

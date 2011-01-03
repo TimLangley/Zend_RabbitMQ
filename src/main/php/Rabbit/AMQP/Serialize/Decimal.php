@@ -32,13 +32,13 @@
    * 'decimals' octet is not signed.
   */
 
-class RABBIT_AMQP_Serialize_Decimal			{
+class Rabbit_AMQP_Serialize_Decimal			{
     private $n;
 	private $e;
 	
 	public function __construct($n, $e)	{
         if($e < 0)
-            throw new RABBIT_Exception(RABBIT_Exception::ERROR_SERIALIZE_EXPONENT);
+            throw new Rabbit_Exception(Rabbit_Exception::ERROR_SERIALIZE_EXPONENT);
         $this->n = $n;
         $this->e = $e;
     }
