@@ -107,6 +107,73 @@ class Rabbit_QueueTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Tests the consume_cancel method.
+	 * 
+	 * @return void
+	 */
+	public function testConsumeCancel()
+	{
+		$channel = $this->_getCommonChannelMock();
+		
+		$queue = new Rabbit_Queue($channel, self::QUEUE_NAME);
+
+		/**
+		 * This could be improved, since the null value comes from an private
+		 * variable that is initialized when consume() is called, its value
+		 * should change. But testing that would require more effort than the
+		 * what I'm willing to put in this. This is okay for now.
+		 */
+		$channel->shouldReceive('basic_cancel')->with(null)->once();
+		
+		$queue->consume_cancel();
+	}
+
+	/**
+	 * Tests the delete method.
+	 * 
+	 * @return void
+	 */
+	public function testDelete()
+	{
+		$channel = $this->_getCommonChannelMock();
+		$queue = new Rabbit_Queue($channel, self::QUEUE_NAME);
+		
+		$channel->shouldReceive('queue_delete')->with(self::QUEUE_NAME);
+		
+		$queue->delete();
+	}
+
+	/**
+	 * Tests the get method.
+	 * 
+	 * @return void
+	 */
+	public function testGet()
+	{
+		$channel = $this->_getCommonChannelMock();
+		$queue = new Rabbit_Queue($channel, self::QUEUE_NAME);
+		
+		$channel->shouldReceive('basic_get')->with(self::QUEUE_NAME)->andReturn(123);
+		
+		$this->assertEquals(123, $queue->get());
+	}
+
+	/**
+	 * Tests the purge method.
+	 * 
+	 * @return void
+	 */
+	public function testPurge()
+	{
+		$channel = $this->_getCommonChannelMock();
+		$queue = new Rabbit_Queue($channel, self::QUEUE_NAME);
+		
+		$channel->shouldReceive('queue_purge')->with(self::QUEUE_NAME);
+		
+		$queue->purge();
+	}
+	
+	/**
 	 * Generates a common {@link Rabbit_AMQP_Channel} mock for testing use.
 	 * 
 	 * @return \Mockery\MockInterface
