@@ -7,7 +7,7 @@
  * @author     Tim Langley
  */
 
-class RABBIT_Queue																{
+class Rabbit_Queue																{
 	private $_amqpChannel;
 	private $_strQueueName;
 	private $_strConsumerTag;
@@ -18,10 +18,10 @@ class RABBIT_Queue																{
 								$strQueueName 					= null,
 								$arrFlags						= null)			{
 	/**
-	 *	@purpose: This loads a new RABBIT_Queue (or creates one)
+	 *	@purpose: This loads a new Rabbit_Queue (or creates one)
 	 *	@NOTE:		This is a bit ugly - because whilst this is a public constructor
 	 *					it's not possible to create these directly because can't get access to the Channel 
-	 *					(outside of the RABBIT_Connection)
+	 *					(outside of the Rabbit_Connection)
 	 *	@param:		$amqpChannel
 	 *	@param:		$strName	- the Queue Name
 	 *	@param:		$arrFlags	- Associative array of flags
@@ -37,9 +37,9 @@ class RABBIT_Queue																{
 	 *														the broker will throw an error if the exchange does not exist.
 	 */
 		if(is_null($strQueueName))
-			throw new RABBIT_Exception_Queue(RABBIT_Exception_Queue::ERROR_QUEUE_NAME_EMPTY);
+			throw new Rabbit_Exception_Queue(RABBIT_Exception_Queue::ERROR_QUEUE_NAME_EMPTY);
 		if(is_null($amqpChannel))
-			throw new RABBIT_Exception_Queue(RABBIT_Exception_Queue::ERROR_CHANNEL_EMPTY);
+			throw new Rabbit_Exception_Queue(RABBIT_Exception_Queue::ERROR_CHANNEL_EMPTY);
 			
 		$this->_strQueueName	= $strQueueName;	
 		$this->_amqpChannel		= $amqpChannel;
@@ -61,11 +61,24 @@ class RABBIT_Queue																{
 		$this->_amqpChannel->queue_declare($this->_strQueueName, $bPassive, $bDurable, $bExclusive, $bAutoDelete);
 								}
 	private function ack(RABBIT_Message $msg)									{
-	
+		/**
+		 *	@purpose:	This performs the message acknowledgement 
+		 *	@param:		$msg	- the message to acknowledge
+		 */
 		$strDeliveryTag			= $msg->delivery_tag;
 		$this->_amqpChannel->basic_ack($strDeliveryTag);
 	}
 	public function bind($strExchangeName, $strRoutingKey 		= null)			{
+		/**
+		 *	@purpose:	Binds this Queue to the given Exchange with the given RoutingKey
+		 *	@NOTE:		if you bind a "second" consumer to the same queue (ie queue name is the same then routing is ignored)
+		 *					and this is a "round robin" scenario
+		 *	@param:		strExchangeName		
+		 *	@param:		strRoutingKey		(as standard format) 
+		 *					#	=> bind to all
+		 *					a.b => separate words
+		 *					*.b	=> * is skip word
+		 */
 		$this->_amqpChannel->queue_bind($this->_strQueueName, $strExchangeName, $strRoutingKey);
 	}
 	public function consume ( $fnCallback
@@ -89,7 +102,7 @@ class RABBIT_Queue																{
 		while(count($this->_amqpChannel->callbacks))
 		    $this->_amqpChannel->wait();
 							}
-	public final function _consume_cb( RABBIT_Message $msg
+	public final function _consume_cb( Rabbit_Message $msg
 									, $fnUserCallback 			= null)			{
 		/**
 		 *	@purpose:	This is the "generic callback" which is called by the Channel

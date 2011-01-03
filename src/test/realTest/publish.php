@@ -36,10 +36,10 @@ $EXCHANGE 		  = 'newExchange-fan';
 $QUEUE 			    = 'msgs';
 $CONSUMER_TAG 	= 'consumer';
 
-$rabbitConn     = new RABBIT_Connection($arrOptions);
-$rabbitExchange = $rabbitConn->getExchange($EXCHANGE, RABBIT_Exchange::EXCHANGE_TYPE_FANOUT);
+$rabbitConn     = new Rabbit_Connection($arrOptions);
+$rabbitExchange = $rabbitConn->getExchange($EXCHANGE, Rabbit_Exchange::EXCHANGE_TYPE_FANOUT);
 
 $msg_body       = implode(' ', array_slice($argv, 1));
-$msg            = new RABBIT_Message($msg_body, array('content_type' => 'text/plain'));
+$msg            = new Rabbit_Message($msg_body, array('content_type' => 'text/plain'));
 $rabbitExchange->publish($msg);
 $rabbitConn->close();

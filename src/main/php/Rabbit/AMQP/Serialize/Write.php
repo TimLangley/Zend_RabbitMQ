@@ -32,13 +32,13 @@
    * 'decimals' octet is not signed.
   */
 
-class RABBIT_AMQP_Serialize_Write							{
+class Rabbit_AMQP_Serialize_Write							{
 	private $out		= "";
 	private $bits		= array();
 	private $bitcount	= 0;
 	
 	private static function chrbytesplit($x, $bytes)		{
-		return array_map('chr', RABBIT_AMQP_Serialize_Write::bytesplit($x,$bytes));
+		return array_map('chr', Rabbit_AMQP_Serialize_Write::bytesplit($x,$bytes));
 	}
 
 	private static function bytesplit($x, $bytes)			{
@@ -57,7 +57,7 @@ class RABBIT_AMQP_Serialize_Write							{
 			$x=bcdiv($x,'256');
 		}
 		if($x!=0)
-			throw new RABBIT_Exception(RABBIT_Exception::ERROR_SERIALIZE_NOT_ZERO);
+			throw new Rabbit_Exception(RABBIT_Exception::ERROR_SERIALIZE_NOT_ZERO);
 		return $res;
 	}
 	private function flushbits()						{
@@ -104,7 +104,7 @@ class RABBIT_AMQP_Serialize_Write							{
 		* Write an integer as an unsigned 8-bit value.
 		*/
 		if($n < 0 || $n > 255)
-			throw new RABBIT_Exception(RABBIT_Exception::ERROR_SERIALIZE_NOT_OCTAL);
+			throw new Rabbit_Exception(RABBIT_Exception::ERROR_SERIALIZE_NOT_OCTAL);
 		$this->flushbits();
 		$this->out .= chr($n);
 	}
@@ -113,7 +113,7 @@ class RABBIT_AMQP_Serialize_Write							{
 		* Write an integer as an unsigned 16-bit value.
 		*/
 		if($n < 0 ||  $n > 65535)
-			throw new RABBIT_Exception(RABBIT_Exception::ERROR_SERIALIZE_NOT_INTEGER);
+			throw new Rabbit_Exception(RABBIT_Exception::ERROR_SERIALIZE_NOT_INTEGER);
 		$this->flushbits();
 		$this->out .= pack('n', $n);
 	}
@@ -144,7 +144,7 @@ class RABBIT_AMQP_Serialize_Write							{
 		*/
 		$this->flushbits();
 		if(strlen($s) > 255)
-			throw new RABBIT_Exception(RABBIT_Exception::ERROR_SERIALIZE_STRING_TOO_LONG);
+			throw new Rabbit_Exception(RABBIT_Exception::ERROR_SERIALIZE_STRING_TOO_LONG);
 		$this->write_octet(strlen($s));
 		$this->out .= $s;
 	}
@@ -168,7 +168,7 @@ class RABBIT_AMQP_Serialize_Write							{
 		* values are (type,value) tuples.
 		*/
 		$this->flushbits();
-		$table_data = new RABBIT_AMQP_Serialize_Write();
+		$table_data = new Rabbit_AMQP_Serialize_Write();
 		foreach($d as $k=>$va)							{
 			list($ftype,$v) = $va;
 			$table_data->write_shortstr($k);

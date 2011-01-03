@@ -7,7 +7,7 @@
  * @author     Tim Langley
  */
 
-class RABBIT_Connection														{
+class Rabbit_Connection														{
 	const	DEFAULT_HOST				= "localhost";
 	const	DEFAULT_VHOST				= "/";
 	const	DEFAULT_PORT				= 5763;
@@ -27,13 +27,13 @@ class RABBIT_Connection														{
 	private $_strUserName				= self::DEFAULT_USER;
 	private $_strPassword				= self::DEFAULT_PASSWORD;
 	
-	private static $_defaultConnection	= null;	//This holds a version of RABBIT_Connection
+	private static $_defaultConnection	= null;	//This holds a version of Rabbit_Connection
 	
 	private $_amqpConnection			= null;
 	
 	public function __construct($config = null)								{
 		/**
-		 *	@purpose: 	Created a new RABBIT_Connection
+		 *	@purpose: 	Created a new Rabbit_Connection
 		 *	@param:		$config	= associative array 
 		 *					array 	"host"		=> 'example.host',
 		 *  						'vhost' 	=> '/',
@@ -61,7 +61,7 @@ class RABBIT_Connection														{
 		 *	@purpose:	Connects to the AMQP instance
 		 *	@return:	true || exception
 		 */
-		$this->_amqpConnection			= new RABBIT_AMQP_Connection($this->_strHost
+		$this->_amqpConnection			= new Rabbit_AMQP_Connection($this->_strHost
 																	,$this->_intPort
 																	,$this->_strUserName
 																	,$this->_strPassword
@@ -89,10 +89,10 @@ class RABBIT_Connection														{
 								, 	$strType 		= null
 								, 	$arrFlags 		= null)					{
 		/**
-		 *	@purpose:	Returns a new RABBIT_Exchange (either creating or finding existing from the server)
+		 *	@purpose:	Returns a new Rabbit_Exchange (either creating or finding existing from the server)
 		 *	@param:		strName		The Exchange Name
 		 *	@param:		strType		The type of Exchange (direct | fanout | topic 
-		 *									- taken from RABBIT_Exchange::EXCHANGE_TYPE)
+		 *									- taken from Rabbit_Exchange::EXCHANGE_TYPE)
 		 *	@param:		arrFlags	Associative array of flags
 		 *								
 		 *								"B_AMQP_PASSIVE"	=> Check if Exchange exists
@@ -124,12 +124,12 @@ class RABBIT_Connection														{
 			$this->connect();
 		$amqpChannel 	= $this->_amqpConnection->channel();
 		$amqpChannel->access_request($this->_strVHost, $bExclusive, $bPassive, $bActive, true);
-		return new RABBIT_Exchange($amqpChannel, $strName, $strType, $arrFlags);
+		return new Rabbit_Exchange($amqpChannel, $strName, $strType, $arrFlags);
 								}
 	public function getQueue(		$strName		= null
 							,		$arrFlags		= null)					{
 		/**
-		 *	@purpose:	Returns a new RABBIT_Queue (either creating or finding existing from the server)
+		 *	@purpose:	Returns a new Rabbit_Queue (either creating or finding existing from the server)
 		 *	@param:		$strName		The Queue Name
 		 * 	@param:		$arrFlags		Associative Array of flags
 		 *								
@@ -156,7 +156,7 @@ class RABBIT_Connection														{
 		}
 		
 		$amqpChannel->access_request($this->_strVHost, $bExclusive, $bPassive, $bActive, false);
-		return new RABBIT_Queue($amqpChannel, $strName, $arrFlags);
+		return new Rabbit_Queue($amqpChannel, $strName, $arrFlags);
 							}
 	public function isConnected()											{
 		/**

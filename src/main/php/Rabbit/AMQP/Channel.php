@@ -7,7 +7,7 @@
  * @author     Tim Langley
  */
 
-class RABBIT_AMQP_Channel extends RABBIT_AMQP_Abstract				{
+class Rabbit_AMQP_Channel extends Rabbit_AMQP_Abstract				{
 	protected $method_map = array(	"20,11" => "open_ok",
 									"20,20" => "flow",
 									"20,21" => "flow_ok",
@@ -71,7 +71,7 @@ class RABBIT_AMQP_Channel extends RABBIT_AMQP_Abstract				{
 		/**
 		* request a channel close
 		*/
-		$args = new RABBIT_AMQP_Serialize_Write();
+		$args = new Rabbit_AMQP_Serialize_Write();
 		$args->write_short($reply_code);
 		$args->write_shortstr($reply_text);
 		$args->write_short($method_sig[0]); // class_id
@@ -101,7 +101,7 @@ class RABBIT_AMQP_Channel extends RABBIT_AMQP_Abstract				{
 		/**
 		* enable/disable flow from peer
 		*/
-		$args = new RABBIT_AMQP_Serialize_Write();
+		$args = new Rabbit_AMQP_Serialize_Write();
 		$args->write_bit($active);
 		$this->send_method_frame(array(20, 20), $args);
 		return $this->wait(array("20,21"));
@@ -111,7 +111,7 @@ class RABBIT_AMQP_Channel extends RABBIT_AMQP_Abstract				{
 		$this->x_flow_ok($this->active);
 	}
 	protected function x_flow_ok($active)							{
-		$args = new RABBIT_AMQP_Serialize_Write();
+		$args = new Rabbit_AMQP_Serialize_Write();
 		$args->write_bit($active);
 		$this->send_method_frame(array(20, 21), $args);
 	}
@@ -121,7 +121,7 @@ class RABBIT_AMQP_Channel extends RABBIT_AMQP_Abstract				{
 	protected function x_open($out_of_band="")						{
 		if($this->is_open)
 			return;
-		$args = new RABBIT_AMQP_Serialize_Write();
+		$args = new Rabbit_AMQP_Serialize_Write();
 		$args->write_shortstr($out_of_band);
 		$this->send_method_frame(array(20, 10), $args);
 		return $this->wait(array("20,11"));
@@ -135,7 +135,7 @@ class RABBIT_AMQP_Channel extends RABBIT_AMQP_Abstract				{
 									$active		= false, 
 									$write		= false, 
 									$read		= false)			{
-		$args = new RABBIT_AMQP_Serialize_Write();
+		$args = new Rabbit_AMQP_Serialize_Write();
 		$args->write_shortstr($strVHost);
 		$args->write_bit($exclusive);
 		$args->write_bit($passive);
@@ -161,7 +161,7 @@ class RABBIT_AMQP_Channel extends RABBIT_AMQP_Abstract				{
 		if($arguments==null)
 			$arguments = array();
 
-		$args = new RABBIT_AMQP_Serialize_Write();
+		$args = new Rabbit_AMQP_Serialize_Write();
 		if($ticket != null)
 			$args->write_short($ticket);
 		else
@@ -182,7 +182,7 @@ class RABBIT_AMQP_Channel extends RABBIT_AMQP_Abstract				{
 	protected function exchange_declare_ok($args)					{
 	}
 	public function exchange_delete($exchange, $if_unused=false, $nowait=false, $ticket=null)	{
-		$args = new RABBIT_AMQP_Serialize_Write();
+		$args = new Rabbit_AMQP_Serialize_Write();
 		if($ticket != null)
 			$args->write_short($ticket);
 		else
@@ -201,7 +201,7 @@ class RABBIT_AMQP_Channel extends RABBIT_AMQP_Abstract				{
 		if($arguments == null)
 			$arguments = array();
 
-		$args = new RABBIT_AMQP_Serialize_Write();
+		$args = new Rabbit_AMQP_Serialize_Write();
 		if($ticket != null)
 			$args->write_short($ticket);
 		else
@@ -229,7 +229,7 @@ class RABBIT_AMQP_Channel extends RABBIT_AMQP_Abstract				{
 		if($arguments == null)
 			$arguments = array();
 
-		$args = new RABBIT_AMQP_Serialize_Write();
+		$args = new Rabbit_AMQP_Serialize_Write();
 		if($ticket != null)
 			$args->write_short($ticket);
 		else
@@ -254,7 +254,7 @@ class RABBIT_AMQP_Channel extends RABBIT_AMQP_Abstract				{
 		return array($queue, $message_count, $consumer_count);
 	}
 	public function queue_delete($queue="", $if_unused=false, $if_empty=false, $nowait=false, $ticket=null){
-		$args = new RABBIT_AMQP_Serialize_Write();
+		$args = new Rabbit_AMQP_Serialize_Write();
 		if($ticket != null)
 			$args->write_short($ticket);
 		else
@@ -273,7 +273,7 @@ class RABBIT_AMQP_Channel extends RABBIT_AMQP_Abstract				{
 		return $args->read_long();
 	}
 	public function queue_purge($queue="", $nowait=false, $ticket=null){
-		$args = new RABBIT_AMQP_Serialize_Write();
+		$args = new Rabbit_AMQP_Serialize_Write();
 		if($ticket != null)
 			$args->write_short($ticket);
 		else
@@ -289,13 +289,13 @@ class RABBIT_AMQP_Channel extends RABBIT_AMQP_Abstract				{
 		return $args->read_long();
 	}
 	public function basic_ack($delivery_tag, $multiple=false)		{
-		$args = new RABBIT_AMQP_Serialize_Write();
+		$args = new Rabbit_AMQP_Serialize_Write();
 		$args->write_longlong($delivery_tag);
 		$args->write_bit($multiple);
 		$this->send_method_frame(array(60, 80), $args);
 	}
 	public function  basic_cancel($consumer_tag, $nowait=false)		{
-		$args = new RABBIT_AMQP_Serialize_Write();
+		$args = new Rabbit_AMQP_Serialize_Write();
 		$args->write_shortstr($consumer_tag);
 		$args->write_bit($nowait);
 		$this->send_method_frame(array(60, 30), $args);
@@ -314,7 +314,7 @@ class RABBIT_AMQP_Channel extends RABBIT_AMQP_Abstract				{
 									$callback		= null,
 									RABBIT_Queue $rabbitQueue	= null, 
 									$ticket			= null)			{
-		$args = new RABBIT_AMQP_Serialize_Write();
+		$args = new Rabbit_AMQP_Serialize_Write();
 		if(is_null($ticket))
 			$args->write_short($this->default_ticket);
 		else
@@ -359,7 +359,7 @@ class RABBIT_AMQP_Channel extends RABBIT_AMQP_Abstract				{
 		}
 	}
 	public function basic_get($queue="", $no_ack=false, $ticket=null){
-		$args = new RABBIT_AMQP_Serialize_Write();
+		$args = new Rabbit_AMQP_Serialize_Write();
 		if($ticket != null)
 		$args->write_short($ticket);
 		else
@@ -393,7 +393,7 @@ class RABBIT_AMQP_Channel extends RABBIT_AMQP_Abstract				{
 									$mandatory		= false, 
 									$immediate		= false,
 									$ticket			= null)			{
-		$args = new RABBIT_AMQP_Serialize_Write();
+		$args = new Rabbit_AMQP_Serialize_Write();
 		if($ticket != null)
 			$args->write_short($ticket);
 		else
@@ -410,7 +410,7 @@ class RABBIT_AMQP_Channel extends RABBIT_AMQP_Abstract				{
 		$msg->body);
 									}
 	public function basic_qos($prefetch_size, $prefetch_count, $a_global){
-		$args = new RABBIT_AMQP_Serialize_Write();
+		$args = new Rabbit_AMQP_Serialize_Write();
 		$args->write_long($prefetch_size);
 		$args->write_short($prefetch_count);
 		$args->write_bit($a_global);
@@ -420,12 +420,12 @@ class RABBIT_AMQP_Channel extends RABBIT_AMQP_Abstract				{
 	protected function basic_qos_ok($args)							{
 	}
 	public function basic_recover($requeue=false)					{
-		$args = new RABBIT_AMQP_Serialize_Write();
+		$args = new Rabbit_AMQP_Serialize_Write();
 		$args->write_bit($requeue);
 		$this->send_method_frame(array(60, 100), $args);
 	}
 	public function basic_reject($delivery_tag, $requeue)			{
-		$args = new RABBIT_AMQP_Serialize_Write();
+		$args = new Rabbit_AMQP_Serialize_Write();
 		$args->write_longlong($delivery_tag);
 		$args->write_bit($requeue);
 		$this->send_method_frame(array(60, 90), $args);

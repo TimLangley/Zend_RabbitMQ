@@ -6,6 +6,6 @@
  * @license    
  * @author     Tim Langley
  */
-class RABBIT_Exception_Message extends RABBIT_Exception {
+class Rabbit_Exception_Message extends Rabbit_Exception {
 	const ERROR_NO_PROPERTY		= "No such property: %s";
 }

@@ -7,7 +7,7 @@
  * @author     Tim Langley
  */
 
-class RABBIT_Exchange															{
+class Rabbit_Exchange															{
 	const	EXCHANGE_TYPE_DIRECT		= "direct";
 	const	EXCHANGE_TYPE_FANOUT		= "fanout";
 	const	EXCHANGE_TYPE_TOPIC			= "topic";
@@ -28,9 +28,9 @@ class RABBIT_Exchange															{
 		 *	@purpose:	This is used to create a new Exchange (or to load an existing one)
 		 *	@NOTE:		This is a bit ugly - because whilst this is a public constructor
 		 *					it's not possible to create these directly because can't get access to the Channel 
-		 *					(outside of the RABBIT_Connection)
+		 *					(outside of the Rabbit_Connection)
 		 *	@param:		strName		The Exchange Name
-		 *	@param:		strType		The Exchange Type (taken from RABBIT_Exchange::EXCHANGE_TYPE_)
+		 *	@param:		strType		The Exchange Type (taken from Rabbit_Exchange::EXCHANGE_TYPE_)
 		 *	@param:		arrFlags	Associative array of flags
 		 *								"B_AMQP_PASSIVE"	=> Check if Exchange exists
 		 *														Passive exchanges are queues will not be redeclared,
@@ -44,13 +44,13 @@ class RABBIT_Exchange															{
 		 */
 		
 		if(is_null($strName))
-			throw new RABBIT_Exception_Exchange(RABBIT_Exception_Exchange::ERROR_EXCHANGE_NAME_EMPTY);
+			throw new Rabbit_Exception_Exchange(RABBIT_Exception_Exchange::ERROR_EXCHANGE_NAME_EMPTY);
 		if(is_null($amqpChannel))
-			throw new RABBIT_Exception_Exchange(RABBIT_Exception_Exchange::ERROR_CHANNEL_EMPTY);
+			throw new Rabbit_Exception_Exchange(RABBIT_Exception_Exchange::ERROR_CHANNEL_EMPTY);
 		if(is_null($strType))
 			$strType			= self::EXCHANGE_TYPE_DIRECT;
 		if(!array_key_exists($strType, self::$_arrExchangeTypes))
-			throw new RABBIT_Exception_Exchange(sprintf(RABBIT_Exception_Exchange::ERROR_UNKNOWN_EXCHANGE_TYPE, $strType));
+			throw new Rabbit_Exception_Exchange(sprintf(RABBIT_Exception_Exchange::ERROR_UNKNOWN_EXCHANGE_TYPE, $strType));
 		
 		$bPassive				= false;
 		$bDurable				= true;
@@ -82,7 +82,7 @@ class RABBIT_Exchange															{
 		 */
 		$this->_amqpChannel->exchange_delete($this->_strExchangeName);
 	}
-	public function publish ( RABBIT_Message $message
+	public function publish ( Rabbit_Message $message
 							, $strRoutingKey = null)							{
 		/**
 		 *	@purpose:	Publishes the message to this exchange

@@ -36,9 +36,9 @@ $EXCHANGE 		  = 'newExchange-fan';
 $QUEUE 			    = isset($argv[1])?$argv[1]:'msgs';
 $CONSUMER_TAG 	= $QUEUE;
 
-$rabbitConn     = new RABBIT_Connection($arrOptions);
+$rabbitConn     = new Rabbit_Connection($arrOptions);
 $rabbitQueue    = $rabbitConn->getQueue($QUEUE);
-$rabbitExchange = $rabbitConn->getExchange($EXCHANGE, RABBIT_Exchange::EXCHANGE_TYPE_FANOUT);
+$rabbitExchange = $rabbitConn->getExchange($EXCHANGE, Rabbit_Exchange::EXCHANGE_TYPE_FANOUT);
 $rabbitQueue->bind($EXCHANGE);
 
 function process_message($msg) {
