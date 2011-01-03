@@ -38,9 +38,6 @@ class Rabbit_Queue																{
 	 */
 		if(is_null($strQueueName))
 			throw new Rabbit_Exception_Queue(Rabbit_Exception_Queue::ERROR_QUEUE_NAME_EMPTY);
-		if(is_null($amqpChannel))
-			throw new Rabbit_Exception_Queue(Rabbit_Exception_Queue::ERROR_CHANNEL_EMPTY);
-
 			
 		$this->_strQueueName	= $strQueueName;	
 		$this->_amqpChannel		= $amqpChannel;
