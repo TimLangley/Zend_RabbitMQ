@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * @category   
  * @package    
@@ -7,18 +7,55 @@
  * @author     Tim Langley
  */
 
-class Rabbit_Connection														{
-	const	DEFAULT_HOST				= "localhost";
-	const	DEFAULT_VHOST				= "/";
-	const	DEFAULT_PORT				= 5763;
-	const	DEFAULT_USER				= "guest";
-	const	DEFAULT_PASSWORD			= "guest";
+class Rabbit_Connection
+{
+	const DEFAULT_HOST				= 'localhost';
+	const DEFAULT_VHOST				= '/';
+	const DEFAULT_PORT				= 5763;
+	const DEFAULT_USER				= 'guest';
+	const DEFAULT_PASSWORD			= 'guest';
 	
-	const	B_AMQP_ACTIVE				= "CONN_Active";
-	const	B_AMQP_AUTODELETE			= "CONN_AutoDelete";
-	const	B_AMQP_DURABLE				= "CONN_Durable";
-	const	B_AMQP_EXCLUSIVE			= "CONN_Exclusive";
-	const	B_AMQP_PASSIVE				= "CONN_Passive";
+    /**
+     * Protocol flag. No idea what it does!
+     * 
+     * @var string
+     */	
+	const B_AMQP_ACTIVE        = 'CONN_Active';
+	
+    /**
+     * Protocol flag. For exchanges, the auto delete flag indicates that the
+     * exchange will be deleted as soon as no more queues are bound to it.
+     * If no queues were ever bound the exchange, the exchange will never be
+     * deleted.
+     * 
+     * @var string
+     */
+	const B_AMQP_AUTODELETE = 'CONN_AutoDelete';
+	
+	/**
+	 * Protocol flag. Durable exchanges and queues will survive a broke
+	 * restart, complete with all of their data.
+	 * 
+	 * @var string
+	 */
+	const B_AMQP_DURABLE = 'CONN_Durable';
+
+	// @FIXME: not valid for exchanges?
+	/**
+	 * Protocol flag. Only ONE client can connect to this queue.
+	 * 
+	 * @var string
+	 */
+	const B_AMQP_EXCLUSIVE = 'CONN_Exclusive';
+
+    /**
+     * Protocol flag. Checks if Exchange exists. Passive exchanges are queues
+     * will not be redeclared, the broker will throw an error if the exchange
+     * does not exist.
+     *  
+     * @var string
+     */
+	const B_AMQP_PASSIVE = 'CONN_Passive';
 	
 	
 	private $_strHost					= self::DEFAULT_HOST;
@@ -31,18 +68,19 @@ class Rabbit_Connection														{
 	
 	private $_amqpConnection			= null;
 	
+    /**
+     *	Creates a new Rabbit_Connection
+     *
+     *	@param:		$config	= associative array 
+     *					array 	"host"		=> 'example.host',
+     *  						'vhost' 	=> '/',
+     *  						'port' 		=> 5763,
+     *   						'login' 	=> 'guest',
+     *   						'password'	=> 'guest'
+     *				$config	= Zend_Config object
+     *				$config	= null => defaults will be used
+     */
 	public function __construct($config = null)								{
-		/**
-		 *	@purpose: 	Created a new Rabbit_Connection
-		 *	@param:		$config	= associative array 
-		 *					array 	"host"		=> 'example.host',
-		 *  						'vhost' 	=> '/',
-		 *  						'port' 		=> 5763,
-		 *   						'login' 	=> 'guest',
-		 *   						'password'	=> 'guest'
-		 *				$config	= Zend_Config object
-		 *				$config	= null => defaults will be used
-		 */
 		if(is_null($config))
 			return;
 		if (is_a($config, "Zend_Config"))
