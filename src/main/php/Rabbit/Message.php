@@ -9,6 +9,8 @@
 
 class Rabbit_Message
 {
+    const MESSAGE_CONSUME_CANCEL = 'quit';
+    
     protected static $_arrProperyTypes = array(
        'content_type'             => 'shortstr',
         'content_encoding'         => 'shortstr',
@@ -130,8 +132,10 @@ class Rabbit_Message
         switch ($name) {
             case 'body':
                 $this->_body = $value;
+                break;
             case 'delivery_info':
                 $this->_deliveryInfo = $value;
+                break;
             default:
                 throw new Rabbit_Exception_Message(
                     sprintf(

@@ -18,9 +18,6 @@ class Rabbit_Queue
     private $_queueName;
     private $_consumerTag;
     
-    // FIXME: This constant should be at Rabbit_Message
-    const MESSAGE_CONSUME_CANCEL = 'quit';
-    
     /**
      * This loads a new Rabbit_Queue (or creates one)
      * 
@@ -31,18 +28,16 @@ class Rabbit_Queue
      * @param Rabbit_AMQP_Channel $amqpChannel The AMQP channel to connect
      *                                         through.
      * @param string              $queueName   The Queue Name
-     * @param boolean             $passive     {@link Rabbit_Connection::B_AMQP_PASSIVE} 
-     * @param boolean             $durable     {@link Rabbit_Connection::B_AMQP_DURABLE}
-     * @param boolean             $exclusive   {@link Rabbit_Connection::B_AMPQ_EXCLUSIVE}
-     * @param boolean             $autoDelete  {@link Rabbit_Connection::B_AMPQ_AUTODELETE}
+     * @param Rabbit_Flags        $flags Flags object.
      * 
      * @throws Rabbit_Queue_Exception
+     * @see Rabbit_Flags
      */
     public function __construct(Rabbit_AMQP_Channel $amqpChannel, $queueName,
-        $passive, $durable, $exclusive, $autoDelete)
+        Rabbit_Flags $flags)
     {
         
-        if (is_null($queueName)) {
+        if (empty($queueName)) {
             throw new Rabbit_Exception_Queue(
                 Rabbit_Exception_Queue::ERROR_QUEUE_NAME_EMPTY
             );
@@ -52,7 +47,11 @@ class Rabbit_Queue
         $this->_amqpChannel = $amqpChannel;
         
         $this->_amqpChannel->queue_declare(
-            $this->_queueName, $passive, $durable, $exclusive, $autoDelete
+            $this->_queueName,
+            $flags->getPassive(),
+            $flags->getDurable(),
+            $flags->getExclusive(),
+            $flags->getAutodelete()
         );
         
     }
@@ -95,10 +94,8 @@ class Rabbit_Queue
      * 
      * @return void
      */
-    public function consume($callback, $consumerTag, $arrOptions = null)
+    public function consume(Closure $callback, $consumerTag, $arrOptions = null)
     {
-        // FIXME: Use a Closure for the callback!!
-        
         $this->_consumerTag = $consumerTag;
         
         // FIXME: I suspect this is where the circular reference occurs ;)
@@ -118,23 +115,6 @@ class Rabbit_Queue
             $this->_amqpChannel->wait();
         }
         
-    }
-    
-    /**
-     * This is the "generic callback" which is called by the Channel.
-     */
-    public final function _consume_cb(Rabbit_Message $msg, $fnUserCallback = null)
-    {
-        $this->_ack($msg);
-
-        // Cancel callback
-        if (self::MESSAGE_CONSUME_CANCEL === $msg->body)  {
-            return $this->consume_cancel();
-        }
-        
-        if (!is_null($fnUserCallback)) {
-            $fnUserCallback($msg);
-        }
     }
     
     /**

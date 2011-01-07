@@ -41,11 +41,10 @@ $rabbitQueue    = $rabbitConn->getQueue($QUEUE);
 $rabbitExchange = $rabbitConn->getExchange($EXCHANGE, Rabbit_Exchange::EXCHANGE_TYPE_FANOUT);
 $rabbitQueue->bind($EXCHANGE);
 
-function process_message($msg) {
+$rabbitQueue->consume(function ($msg) {
     echo "\n--------\n";
     echo $msg->body;
     echo "\n--------\n";
-}
+}, $CONSUMER_TAG);
 
-$rabbitQueue->consume('process_message', $CONSUMER_TAG);
 $rabbitConn->close();

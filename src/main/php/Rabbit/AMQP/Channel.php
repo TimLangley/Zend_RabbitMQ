@@ -311,7 +311,7 @@ class Rabbit_AMQP_Channel extends Rabbit_AMQP_Abstract				{
 									$no_ack			= false, 
 									$exclusive		= false, 
 									$nowait			= false,
-									$callback		= null,
+									Closure $callback		= null,
 									Rabbit_Queue $rabbitQueue	= null, 
 									$ticket			= null)			{
 		$args = new Rabbit_AMQP_Serialize_Write();
@@ -352,10 +352,14 @@ class Rabbit_AMQP_Channel extends Rabbit_AMQP_Abstract				{
 										"routing_key" 	=> $routing_key
 										);
 
-		if(array_key_exists($consumer_tag, $this->callbacks))		{
-			$rabbitQueue				= $this->callbacks[$consumer_tag]["Queue"];
-			$callback					= $this->callbacks[$consumer_tag]["Callback"];
-			$rabbitQueue->_consume_cb($msg, $callback);
+		if(array_key_exists($consumer_tag, $this->callbacks)) {
+		    
+		    if ($msg->body == Rabbit_Message::MESSAGE_CONSUME_CANCEL) {
+		        $this->basic_cancel($consumer_tag);
+		        return;
+		    }
+		    
+			$this->callbacks[$consumer_tag]['Callback']($msg);
 		}
 	}
 	public function basic_get($queue="", $no_ack=false, $ticket=null){

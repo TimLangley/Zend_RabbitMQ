@@ -38,9 +38,8 @@ class Rabbit_Exchange
      *                        {@link Rabbit_Exchange::EXCHANGE_TYPE_TOPIC}
      * @param Rabbit_Flags        $flags Flags object.
      *
-     * @see Rabbit_Flags
-     * 
      * @throws Rabbit_Exception_Exchange
+     * @see Rabbit_Flags
      */
     public function __construct(Rabbit_AMQP_Channel $amqpChannel, $name, $type,
         Rabbit_Flags $flags = null)
