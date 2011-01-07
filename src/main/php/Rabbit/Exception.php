@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * @category   
  * @package    
@@ -7,6 +7,9 @@
  * @author     Tim Langley
  */
 
+/**
+ * Rabbit generic exception.
+ */
 class Rabbit_Exception extends Exception
 {
     const ERROR_CONNECTING = 'Error Connecting to server(%d): %s';

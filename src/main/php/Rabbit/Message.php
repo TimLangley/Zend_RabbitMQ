@@ -84,8 +84,8 @@ class Rabbit_Message
             case 'delivery_tag':
                 if (isset($this->_deliveryInfo)) {
                     if (array_key_exists(
-                       'delivery_tag', 
-                       $this->_deliveryInfo
+                        'delivery_tag', 
+                        $this->_deliveryInfo
                     )) {
                         return $this->_deliveryInfo['delivery_tag'];
                     }
@@ -99,12 +99,12 @@ class Rabbit_Message
                 }
                 
             default:
-                if (array_key_exists($name,$this->_properties)) {
+                if (array_key_exists($name, $this->_properties)) {
                     return $this->_properties[$name];
                 }
                 
                 if (isset($this->_deliveryInfo)) {
-                    if (array_key_exists($name,$this->_deliveryInfo)) {
+                    if (array_key_exists($name, $this->_deliveryInfo)) {
                         return $this->_deliveryInfo[$name];
                     }
                 }
@@ -121,8 +121,9 @@ class Rabbit_Message
     /**
      * Sets a message's property.
      * 
-     * @param string $name The property's name.
+     * @param string $name  The property's name.
      * @param string $value The new property's value.
+     * 
      * @throws Rabbit_Exception_Message
      * 
      * @return void

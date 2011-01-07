@@ -1,10 +1,14 @@
-<?
+<?php
 /**
  * @category   
  * @package    
  * @copyright  2011-01-01, Campaign and Digital Intelligence Ltd
  * @license    
  * @author     Tim Langley
+ */
+
+/**
+ * Exception for rabbit's exchanges errors.
  */
 class Rabbit_Exception_Exchange extends Rabbit_Exception
 {

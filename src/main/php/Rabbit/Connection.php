@@ -7,6 +7,9 @@
  * @author     Tim Langley
  */
 
+/**
+ * Represents a connection to the rabbitmq server.
+ */
 class Rabbit_Connection
 {
     const DEFAULT_HOST     = 'localhost';
@@ -125,12 +128,13 @@ class Rabbit_Connection
      * 
      * The returned exchange is either new or existing from the server.
      * 
-     * @param string $strName The Exchange Name
-     * @param string $strType The type of Exchange one of: 
+     * @param string       $strName The Exchange Name
+     * @param string       $strType The type of Exchange one of: 
      *                        {@link Rabbit_Exchange::EXCHANGE_TYPE_DIRECT}
      *                        {@link Rabbit_Exchange::EXCHANGE_TYPE_FANOUT}
      *                        {@link Rabbit_Exchange::EXCHANGE_TYPE_TOPIC}
-     * @param Rabbit_Flags $flags The flags to use with in the exchange.
+     * @param Rabbit_Flags $flags   The flags to use with in the exchange.
+     * 
      * @see Rabbit_Flags
      * 
      * @return Rabbit_Exchange
@@ -147,11 +151,11 @@ class Rabbit_Connection
         
         $amqpChannel = $this->_amqpConnection->channel();
         $amqpChannel->access_request(
-          $this->_strVHost,
-          $flags->getExclusive(),
-          $flags->getPassive(),
-          $flags->getActive(),
-          true
+            $this->_strVHost,
+            $flags->getExclusive(),
+            $flags->getPassive(),
+            $flags->getActive(),
+            true
         );
         
         return new Rabbit_Exchange($amqpChannel, $strName, $strType, $flags);
@@ -162,8 +166,9 @@ class Rabbit_Connection
      * 
      * The returned exchange is either new or existing from the server.
      * 
-     * @param string       $strName  The Queue Name
-     * @param Rabbit_Flags $flags    The flags to use with in the exchange.
+     * @param string       $strName The Queue Name
+     * @param Rabbit_Flags $flags   The flags to use with in the exchange.
+     * 
      * @see Rabbit_Flags
      * 
      * @return Rabbit_Queue

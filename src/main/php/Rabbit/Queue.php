@@ -7,6 +7,9 @@
  * @author     Tim Langley
  */
 
+/**
+ * Represents a rabbit's queue.
+ */
 class Rabbit_Queue                                                                
 {
     
@@ -28,9 +31,9 @@ class Rabbit_Queue
      * @param Rabbit_AMQP_Channel $amqpChannel The AMQP channel to connect
      *                                         through.
      * @param string              $queueName   The Queue Name
-     * @param Rabbit_Flags        $flags Flags object.
+     * @param Rabbit_Flags        $flags       Flags object.
      * 
-     * @throws Rabbit_Queue_Exception
+     * @throws Rabbit_Exception_Queue
      * @see Rabbit_Flags
      */
     public function __construct(Rabbit_AMQP_Channel $amqpChannel, $queueName,
@@ -90,11 +93,12 @@ class Rabbit_Queue
      * 
      * When one arrives it calls the given callback.
      * 
-     * @param Closure $callback The callback to use.
+     * @param Closure $callback    The callback to use.
+     * @param string  $consumerTag The tag used for the consumer.
      * 
      * @return void
      */
-    public function consume(Closure $callback, $consumerTag, $arrOptions = null)
+    public function consume(Closure $callback, $consumerTag)
     {
         $this->_consumerTag = $consumerTag;
         

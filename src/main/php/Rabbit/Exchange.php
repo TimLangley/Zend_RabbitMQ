@@ -7,6 +7,9 @@
  * @author     Tim Langley
  */
 
+/**
+ * Represents a rabbit exchange.
+ */
 class Rabbit_Exchange
 {
     const EXCHANGE_TYPE_DIRECT = 'direct';
@@ -14,10 +17,10 @@ class Rabbit_Exchange
     const EXCHANGE_TYPE_TOPIC  = 'topic';
     
     private static $_arrExchangeTypes = array(
-       self::EXCHANGE_TYPE_DIRECT => 1,
-       self::EXCHANGE_TYPE_FANOUT => 1,
-       self::EXCHANGE_TYPE_TOPIC  => 1
-   );
+        self::EXCHANGE_TYPE_DIRECT => 1,
+        self::EXCHANGE_TYPE_FANOUT => 1,
+        self::EXCHANGE_TYPE_TOPIC  => 1
+    );
     
     private $_exchangeName;
     private $_exchangeType;
@@ -32,11 +35,11 @@ class Rabbit_Exchange
      * 
      * @param Rabbit_AMQP_Channel $amqpChannel The channel to use. 
      * @param string              $name        The Exchange Name
-     * @param string              $strType The type of Exchange one of: 
+     * @param string              $type        The type of Exchange one of: 
      *                        {@link Rabbit_Exchange::EXCHANGE_TYPE_DIRECT}
      *                        {@link Rabbit_Exchange::EXCHANGE_TYPE_FANOUT}
      *                        {@link Rabbit_Exchange::EXCHANGE_TYPE_TOPIC}
-     * @param Rabbit_Flags        $flags Flags object.
+     * @param Rabbit_Flags        $flags       Flags object.
      *
      * @throws Rabbit_Exception_Exchange
      * @see Rabbit_Flags
@@ -46,7 +49,9 @@ class Rabbit_Exchange
     {
         
         if (empty($name)) {
-            throw new Rabbit_Exception_Exchange(Rabbit_Exception_Exchange::ERROR_EXCHANGE_NAME_EMPTY);
+            throw new Rabbit_Exception_Exchange(
+                Rabbit_Exception_Exchange::ERROR_EXCHANGE_NAME_EMPTY
+            );
         }
         
         // TODO: This should throw an exception, not go with the default value.
@@ -84,14 +89,16 @@ class Rabbit_Exchange
     /**
      * Binds a new Queue to this exchange.
      * 
-     * @param string $queueName The queue's name.
+     * @param string $queueName  The queue's name.
      * @param string $routingKey The routing key to use.
      * 
      * @return void
      */
     public function bind($queueName, $routingKey = null)
     {
-        $this->_amqpChannel->queue_bind($queueName, $this->_exchangeName, $routingKey);
+        $this->_amqpChannel->queue_bind(
+            $queueName, $this->_exchangeName, $routingKey
+        );
     }
     
     /**
@@ -114,7 +121,9 @@ class Rabbit_Exchange
      */
     public function publish(Rabbit_Message $message, $routingKey = null)
     {
-        $this->_amqpChannel->basic_publish($message, $this->_exchangeName, $routingKey);
+        $this->_amqpChannel->basic_publish(
+            $message, $this->_exchangeName, $routingKey
+        );
     }
     
 }
