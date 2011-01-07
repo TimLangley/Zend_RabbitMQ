@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * @category   
  * @package    
@@ -7,7 +7,8 @@
  * @author     Tim Langley
  */
 
-class Rabbit_Exception_Connection extends Rabbit_Exception {
-	const	ERROR_NOT_CONNECTED		= "Must be connected";
+class Rabbit_Exception_Connection extends Rabbit_Exception
+{
+    const ERROR_NOT_CONNECTED = 'Must be connected';
 }
 

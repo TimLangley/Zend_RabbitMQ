@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * @category   
  * @package    
@@ -6,6 +6,7 @@
  * @license    
  * @author     Tim Langley
  */
-class Rabbit_Exception_Message extends Rabbit_Exception {
-	const ERROR_NO_PROPERTY		= "No such property: %s";
+class Rabbit_Exception_Message extends Rabbit_Exception
+{
+    const ERROR_NO_PROPERTY= 'No such property: %s';
 }
