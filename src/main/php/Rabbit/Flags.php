@@ -66,7 +66,7 @@ class Rabbit_Flags
      * 
      * @param array|Zend_Config $flags The flags to use.
      */
-    public function __construct($flags)
+    public function __construct($flags = array())
     {
         if ($flags instanceof Zend_Config) {
             $flags = $flags->toArray();

@@ -48,8 +48,8 @@ class Rabbit_Queue
             );
         }
             
-        $this->_queueName = $queueName;    
-        $this->_amqpChannel  = $amqpChannel;
+        $this->_queueName   = $queueName;    
+        $this->_amqpChannel = $amqpChannel;
         
         $this->_amqpChannel->queue_declare(
             $this->_queueName, $passive, $durable, $exclusive, $autoDelete
