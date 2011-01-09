@@ -60,17 +60,6 @@ class Rabbit_Queue
     }
     
     /**
-     * This performs the message acknowledgement.
-     *  
-     * @param Rabbit_Message $msg The message to acknowledge.
-     * @return void
-     */
-    private function _ack(Rabbit_Message $msg)
-    {
-        $this->_amqpChannel->basic_ack($msg->delivery_tag);
-    }
-    
-    /**
      * Binds this Queue to the given Exchange with the given RoutingKey
      * 
      * If you bind a "second" consumer to the same queue (ie queue name is the

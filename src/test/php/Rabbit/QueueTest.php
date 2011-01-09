@@ -29,16 +29,11 @@ class Rabbit_QueueTest extends PHPUnit_Framework_TestCase
     {
         $channel = $this->_getCommonChannelMock();
         
-        $channel->mockery_findExpectation(
-        	'queue_declare',
-            array(self::QUEUE_NAME, false, true, false, false)
-        )->times(2);
-        
         // Default ones.
         $flags = $this->_getCommonFlagsMock();
         
         try {
-            $queue = new Rabbit_Queue($channel, self::QUEUE_NAME, $flags);
+            $queue = new Rabbit_Queue($channel, null, $flags);
         } catch (Rabbit_Exception_Queue $e) {
             $this->assertEquals(
                 Rabbit_Exception_Queue::ERROR_QUEUE_NAME_EMPTY, $e->getMessage()
@@ -49,6 +44,7 @@ class Rabbit_QueueTest extends PHPUnit_Framework_TestCase
             $channel, self::QUEUE_NAME, $flags
         );
         
+        $channel->mockery_verify();
     }
     
     /**
@@ -196,7 +192,7 @@ class Rabbit_QueueTest extends PHPUnit_Framework_TestCase
         $channel = Mockery::mock('Rabbit_AMQP_Channel');
         $channel->shouldReceive('queue_declare')->with(
             self::QUEUE_NAME, false, true, false, false
-        )->zeroOrMoreTimes();
+        )->times(1)->atLeast();
         
         return $channel;
     }
