@@ -207,7 +207,7 @@ class Rabbit_QueueTest extends PHPUnit_Framework_TestCase
         $channel = Mockery::mock('Rabbit_AMQP_Channel');
         $channel->shouldReceive('queue_declare')->with(
             self::QUEUE_NAME, false, true, false, false
-        )->times(1)->atLeast();
+        )->atLeast()->times(1);
         
         return $channel;
     }
