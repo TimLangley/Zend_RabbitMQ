@@ -61,6 +61,10 @@ class Rabbit_Connection
      */
     public function __construct($config = null)
     {
+        if (is_null($config)) {
+            return;
+        }
+
         if ($config instanceof Zend_Config) {
             $config = $config->toArray();
         }
@@ -190,9 +194,7 @@ class Rabbit_Connection
      */
     public function getQueue($strName = null, Rabbit_Flags $flags = null)
     {
-        if (!$this->isConnected()) {
-            $this->connect();
-        }
+        $this->connect();
 
         $amqpChannel = $this->_amqpConnection->channel();
 
@@ -315,6 +317,18 @@ class Rabbit_Connection
     public function setDefaultConnection()
     {
         self::$_defaultConnection = $this;
+    }
+
+    /**
+     * Sets the current connection. Testing purposes.
+     *
+     * @param Rabbit_AMQP_Connection $connection The connection itself.
+     *
+     * @return void
+     */
+    public function setConnection(Rabbit_AMQP_Connection $connection)
+    {
+        $this->_amqpConnection = $connection;
     }
 
 }
