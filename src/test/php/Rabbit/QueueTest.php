@@ -27,22 +27,26 @@ class Rabbit_QueueTest extends PHPUnit_Framework_TestCase
      */
     public function testConstruct()
     {
-        $channel = Mockery::mock('Rabbit_AMQP_Channel');
+        $channel = $this->_getCommonChannelMock();
+        
+        $channel->mockery_findExpectation(
+        	'queue_declare',
+            array(self::QUEUE_NAME, false, true, false, false)
+        )->times(2);
+        
+        // Default ones.
+        $flags = $this->_getCommonFlagsMock();
         
         try {
-            $queue = new Rabbit_Queue($channel, null, true, true, true, true);
+            $queue = new Rabbit_Queue($channel, self::QUEUE_NAME, $flags);
         } catch (Rabbit_Exception_Queue $e) {
             $this->assertEquals(
                 Rabbit_Exception_Queue::ERROR_QUEUE_NAME_EMPTY, $e->getMessage()
             );
         }
         
-        $channel->shouldReceive('queue_declare')->with(
-            self::QUEUE_NAME, false, true, false, true
-        );
-        
         $queue = new Rabbit_Queue(
-            $channel, self::QUEUE_NAME, false, true, false, true
+            $channel, self::QUEUE_NAME, $flags
         );
         
     }
@@ -62,9 +66,11 @@ class Rabbit_QueueTest extends PHPUnit_Framework_TestCase
         $channel->shouldReceive('queue_bind')->with(
             self::QUEUE_NAME, $exchangeName, $routingKey
         );
-        
+
+        $flags = $this->_getCommonFlagsMock();
+         
         $queue = new Rabbit_Queue(
-            $channel, self::QUEUE_NAME, true, true, true, true
+            $channel, self::QUEUE_NAME, $this->_getCommonFlagsMock()
         );
         
         $queue->bind($exchangeName, $routingKey);
@@ -87,7 +93,7 @@ class Rabbit_QueueTest extends PHPUnit_Framework_TestCase
         $channel->callbacks = new Rabbit_QueueTest_DecrementingCountable(1);
         
         $queue = new Rabbit_Queue(
-            $channel, self::QUEUE_NAME, true, true, true, true
+            $channel, self::QUEUE_NAME, $this->_getCommonFlagsMock()
         );
         
         // The idea here is not to test the callback.
@@ -114,7 +120,7 @@ class Rabbit_QueueTest extends PHPUnit_Framework_TestCase
         $channel = $this->_getCommonChannelMock();
         
         $queue = new Rabbit_Queue(
-            $channel, self::QUEUE_NAME, true, true, true, true
+            $channel, self::QUEUE_NAME, $this->_getCommonFlagsMock()
         );
 
         /**
@@ -137,7 +143,7 @@ class Rabbit_QueueTest extends PHPUnit_Framework_TestCase
     {
         $channel = $this->_getCommonChannelMock();
         $queue = new Rabbit_Queue(
-            $channel, self::QUEUE_NAME, true, true, true, true
+            $channel, self::QUEUE_NAME, $this->_getCommonFlagsMock()
         );
         
         $channel->shouldReceive('queue_delete')->with(self::QUEUE_NAME);
@@ -155,7 +161,7 @@ class Rabbit_QueueTest extends PHPUnit_Framework_TestCase
         $channel = $this->_getCommonChannelMock();
         
         $queue = new Rabbit_Queue(
-            $channel, self::QUEUE_NAME, true, true, true, true
+            $channel, self::QUEUE_NAME, $this->_getCommonFlagsMock()
         );
         
         $channel->shouldReceive('basic_get')->with(self::QUEUE_NAME)->andReturn(123);
@@ -172,7 +178,7 @@ class Rabbit_QueueTest extends PHPUnit_Framework_TestCase
     {
         $channel = $this->_getCommonChannelMock();
         $queue = new Rabbit_Queue(
-            $channel, self::QUEUE_NAME, true, true, true, true
+            $channel, self::QUEUE_NAME, $this->_getCommonFlagsMock()
         );
         
         $channel->shouldReceive('queue_purge')->with(self::QUEUE_NAME);
@@ -188,9 +194,38 @@ class Rabbit_QueueTest extends PHPUnit_Framework_TestCase
     private function _getCommonChannelMock()
     {
         $channel = Mockery::mock('Rabbit_AMQP_Channel');
-        $channel->shouldReceive('queue_declare')->with(self::QUEUE_NAME, true, true, true, true);
+        $channel->shouldReceive('queue_declare')->with(
+            self::QUEUE_NAME, false, true, false, false
+        )->zeroOrMoreTimes();
         
         return $channel;
+    }
+    
+    /**
+     * Generates a {@link Rabbit_Flags} common mock, with default flags set.
+     * 
+     * @return Rabbit_Flags
+     */
+    private function _getCommonFlagsMock()
+    {
+        $mock = Mockery::mock('Rabbit_Flags');
+        
+        $mock->shouldReceive('getPassive')
+            ->andReturn(false)->zeroOrMoreTimes();
+            
+        $mock->shouldReceive('getDurable')
+            ->andReturn(true)->zeroOrMoreTimes();
+            
+        $mock->shouldReceive('getAutodelete')
+            ->andReturn(false)->zeroOrMoreTimes();
+            
+        $mock->shouldReceive('getExclusive')
+            ->andReturn(false)->zeroOrMoreTimes();
+            
+        $mock->shouldReceive('getActive')
+            ->andReturn(true)->zeroOrMoreTimes();
+            
+        return $mock;
     }
     
 }
