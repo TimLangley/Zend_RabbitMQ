@@ -32,9 +32,9 @@ class Rabbit_Exchange
     const EXCHANGE_TYPE_TOPIC  = 'topic';
     
     private static $_arrExchangeTypes = array(
-        self::EXCHANGE_TYPE_DIRECT => 1,
-        self::EXCHANGE_TYPE_FANOUT => 1,
-        self::EXCHANGE_TYPE_TOPIC  => 1
+        self::EXCHANGE_TYPE_DIRECT,
+        self::EXCHANGE_TYPE_FANOUT,
+        self::EXCHANGE_TYPE_TOPIC
     );
     
     private $_exchangeName;
@@ -69,23 +69,23 @@ class Rabbit_Exchange
             );
         }
         
-        // TODO: This should throw an exception, not go with the default value.
         if (is_null($type)) {
             $type = self::EXCHANGE_TYPE_DIRECT;
+        } else {
+            if (array_search($type, self::$_arrExchangeTypes) === false) {
+                throw new Rabbit_Exception_Exchange(
+                    sprintf(
+                        Rabbit_Exception_Exchange::ERROR_UNKNOWN_EXCHANGE_TYPE,
+                        $type
+                    )
+                );
+            }
         }
         
         if (is_null($flags)) {
             $flags = new Rabbit_Flags();
         }
         
-        if (!array_key_exists($type, self::$_arrExchangeTypes)) {
-            throw new Rabbit_Exception_Exchange(
-                sprintf(
-                    Rabbit_Exception_Exchange::ERROR_UNKNOWN_EXCHANGE_TYPE,
-                    $type
-                )
-            );
-        }
             
         $this->_exchangeName    = $name;
         $this->_exchangeType    = $type;
