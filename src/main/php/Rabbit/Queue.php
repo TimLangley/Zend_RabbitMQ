@@ -114,8 +114,7 @@ class Rabbit_Queue
             false,
             false,
             false,
-            $callback,
-            $this
+            $callback
         );
 
         // Loop as long as the channel has callbacks registered.

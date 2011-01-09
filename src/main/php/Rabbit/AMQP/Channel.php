@@ -419,7 +419,7 @@ class Rabbit_AMQP_Channel extends Rabbit_AMQP_Abstract
     public function basic_consume($queue = "", $consumer_tag = "",
         $no_local = false, $no_ack = false, $exclusive = false,
         $nowait = false, Closure $callback = null,
-        Rabbit_Queue $rabbitQueue = null, $ticket = null)
+        $ticket = null)
     {
         $args = new Rabbit_AMQP_Serialize_Write();
         if (is_null($ticket))
@@ -441,8 +441,7 @@ class Rabbit_AMQP_Channel extends Rabbit_AMQP_Abstract
             $consumer_tag = $this->wait(array(
                         "60,21"
                     ));
-        $this->callbacks[$consumer_tag]["Callback"] = $callback;
-        $this->callbacks[$consumer_tag]["Queue"] = $rabbitQueue;
+        $this->callbacks[$consumer_tag]['Callback'] = $callback;
         return $consumer_tag;
     }
 
