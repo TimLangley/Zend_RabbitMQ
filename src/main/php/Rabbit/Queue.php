@@ -106,7 +106,6 @@ class Rabbit_Queue
     {
         $this->_consumerTag = $consumerTag;
 
-        // FIXME: I suspect this is where the circular reference occurs ;)
         $this->_amqpChannel->basic_consume(
             $this->_queueName,
             $consumerTag,
