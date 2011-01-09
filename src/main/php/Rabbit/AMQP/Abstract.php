@@ -15,10 +15,10 @@
  */
 
 /**
- * @category   
- * @package    
+ * @category
+ * @package
  * @copyright  2011-01-01, Campaign and Digital Intelligence Ltd
- * @license    
+ * @license
  * @author     Tim Langley
  */
 
@@ -204,16 +204,16 @@ class Rabbit_AMQP_Abstract
             $frm = $this->next_frame();
             $frame_type = $frm[0];
             $payload = $frm[1];
-            
+
             if ($frame_type != 1) {
                 throw new Exception(
                     "Expecting AMQP method, received frame type: $frame_type");
             }
-            
+
             if (strlen($payload) < 4) {
                 throw new Exception("Method frame too short");
             }
-            
+
             $method_sig_array = unpack("n2", substr($payload, 0, 4));
             $method_sig =
                 "" . $method_sig_array[1] . "," . $method_sig_array[2];
@@ -223,7 +223,7 @@ class Rabbit_AMQP_Abstract
             } else {
                 $content = null;
             }
-            
+
             if ($allowed_methods == null
                 || in_array($method_sig, $allowed_methods)
                 || in_array($method_sig, Rabbit_AMQP_Abstract::$CLOSE_METHODS))

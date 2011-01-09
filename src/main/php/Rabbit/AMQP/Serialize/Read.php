@@ -15,10 +15,10 @@
  */
 
 /**
- * @category   
- * @package    
+ * @category
+ * @package
  * @copyright  2011-01-01, Campaign and Digital Intelligence Ltd
- * @license    
+ * @license
  * @author     Tim Langley
  */
 
@@ -65,13 +65,13 @@ class Rabbit_AMQP_Serialize_Read
         if ($this->sock) {
             $res = '';
             $read = 0;
-            
+
             while ($read < $n
                 && (false !== ($buf = fread($this->sock, $n - $read)))) {
                 $read += strlen($buf);
                 $res .= $buf;
             }
-            
+
             if (strlen($res) != $n) {
                 throw new Rabbit_Exception(
                     sprintf(
@@ -81,11 +81,11 @@ class Rabbit_AMQP_Serialize_Read
                     )
                 );
             }
-            
+
             $this->offset += $n;
-            
+
         } else {
-            
+
             if (strlen($this->str) < $n) {
                 throw new Rabbit_Exception(
                     sprintf(
@@ -95,12 +95,12 @@ class Rabbit_AMQP_Serialize_Read
                     )
                 );
             }
-            
+
             $res = substr($this->str, 0, $n);
             $this->str = substr($this->str, $n);
             $this->offset += $n;
         }
-        
+
         return $res;
     }
 
@@ -110,11 +110,11 @@ class Rabbit_AMQP_Serialize_Read
             $this->bits = ord($this->rawread(1));
             $this->bitcount = 8;
         }
-        
+
         $result = ($this->bits & 1) == 1;
         $this->bits >>= 1;
         $this->bitcount -= 1;
-        
+
         return $result;
     }
 
@@ -122,7 +122,7 @@ class Rabbit_AMQP_Serialize_Read
     {
         $this->bitcount = $this->bits = 0;
         list(, $res) = unpack('C', $this->rawread(1));
-        
+
         return $res;
     }
 
@@ -130,7 +130,7 @@ class Rabbit_AMQP_Serialize_Read
     {
         $this->bitcount = $this->bits = 0;
         list(, $res) = unpack('n', $this->rawread(2));
-        
+
         return $res;
     }
 
@@ -148,14 +148,14 @@ class Rabbit_AMQP_Serialize_Read
          * Use with caution!
          */
         list(, $res) = unpack('N', $this->rawread(4));
-        
+
         if ($this->is64bits) {
             $sres = sprintf("%u", $res);
             return (int) $sres;
         } else {
             return $res;
         }
-        
+
     }
 
     public function read_long()
@@ -165,7 +165,7 @@ class Rabbit_AMQP_Serialize_Read
         $this->bitcount = $this->bits = 0;
         list(, $res) = unpack('N', $this->rawread(4));
         $sres = sprintf("%u", $res);
-        
+
         return $sres;
     }
 
@@ -175,7 +175,7 @@ class Rabbit_AMQP_Serialize_Read
         // In PHP unpack('N') always return signed value,
         // on both 32 and 64 bit systems!
         list(, $res) = unpack('N', $this->rawread(4));
-        
+
         return $res;
     }
 
@@ -201,7 +201,7 @@ class Rabbit_AMQP_Serialize_Read
          */
         $this->bitcount = $this->bits = 0;
         list(, $slen) = unpack('C', $this->rawread(1));
-        
+
         return $this->rawread($slen);
     }
 
@@ -214,13 +214,13 @@ class Rabbit_AMQP_Serialize_Read
          */
         $this->bitcount = $this->bits = 0;
         $slen = $this->read_php_int();
-        
+
         if ($slen < 0) {
             throw new Rabbit_Exception(
                 Rabbit_Exception::ERROR_SERIALIZE_STRING_TOO_LONG
             );
         }
-        
+
         return $this->rawread($slen);
     }
 
@@ -241,16 +241,16 @@ class Rabbit_AMQP_Serialize_Read
          */
         $this->bitcount = $this->bits = 0;
         $tlen = $this->read_php_int();
-        
+
         if ($tlen < 0) {
             throw new Rabbit_Exception(
                 Rabbit_Exception::ERROR_SERIALIZE_TABLE
             );
         }
-        
+
         $table_data = new Rabbit_AMQP_Serialize_Read($this->rawread($tlen));
         $result = array();
-        
+
         while ($table_data->tell() < $tlen) {
             $name = $table_data->read_shortstr();
             $ftype = $table_data->rawread(1);
@@ -273,7 +273,7 @@ class Rabbit_AMQP_Serialize_Read
                     $ftype, $val
                 );
         }
-        
+
         return $result;
     }
 
@@ -281,5 +281,5 @@ class Rabbit_AMQP_Serialize_Read
     {
         return $this->offset;
     }
-    
+
 }

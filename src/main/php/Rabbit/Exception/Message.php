@@ -15,10 +15,10 @@
  */
 
 /**
- * @category   
- * @package    
+ * @category
+ * @package
  * @copyright  2011-01-02, Campaign and Digital Intelligence Ltd
- * @license    
+ * @license
  * @author     Tim Langley
  */
 

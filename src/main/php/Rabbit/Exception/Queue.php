@@ -15,15 +15,15 @@
  */
 
 /**
- * @category   
- * @package    
+ * @category
+ * @package
  * @copyright  2011-01-01, Campaign and Digital Intelligence Ltd
- * @license    
+ * @license
  * @author     Tim Langley
  */
 
 /**
- * Exception for rabbit's queues errors. 
+ * Exception for rabbit's queues errors.
  */
 class Rabbit_Exception_Queue extends Rabbit_Exception
 {

@@ -15,10 +15,10 @@
  */
 
 /**
- * @category   
- * @package    
+ * @category
+ * @package
  * @copyright  2011-01-01, Campaign and Digital Intelligence Ltd
- * @license    
+ * @license
  * @author     Tim Langley
  */
 
@@ -82,7 +82,7 @@ class Rabbit_AMQP_Serialize_Write
                 Rabbit_Exception::ERROR_SERIALIZE_NOT_ZERO
             );
         }
-        
+
         return $res;
     }
 
@@ -101,7 +101,7 @@ class Rabbit_AMQP_Serialize_Write
          * Get what's been encoded so far.
          */
         $this->flushbits();
-        
+
         return $this->out;
     }
 
@@ -120,18 +120,18 @@ class Rabbit_AMQP_Serialize_Write
          * Write a boolean value.
          */
         $b = $b ? 1 : 0;
-        
+
         $shift = $this->bitcount % 8;
-        
+
         if ($shift == 0) {
             $last = 0;
         } else {
             $last = array_pop($this->bits);
         }
-        
+
         $last |= ($b << $shift);
         array_push($this->bits, $last);
-        
+
         $this->bitcount += 1;
     }
 
@@ -145,7 +145,7 @@ class Rabbit_AMQP_Serialize_Write
                 Rabbit_Exception::ERROR_SERIALIZE_NOT_OCTAL
             );
         }
-        
+
         $this->flushbits();
         $this->out .= chr($n);
     }
@@ -160,7 +160,7 @@ class Rabbit_AMQP_Serialize_Write
                 Rabbit_Exception::ERROR_SERIALIZE_NOT_INTEGER
             );
         }
-        
+
         $this->flushbits();
         $this->out .= pack('n', $n);
     }
@@ -198,13 +198,13 @@ class Rabbit_AMQP_Serialize_Write
          * Assume UTF-8 encoding.
          */
         $this->flushbits();
-        
+
         if (strlen($s) > 255) {
             throw new Rabbit_Exception(
                 Rabbit_Exception::ERROR_SERIALIZE_STRING_TOO_LONG
             );
         }
-    
+
         $this->write_octet(strlen($s));
         $this->out .= $s;
     }

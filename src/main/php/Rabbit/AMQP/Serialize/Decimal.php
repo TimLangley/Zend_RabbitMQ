@@ -15,10 +15,10 @@
  */
 
 /**
- * @category   
- * @package    
+ * @category
+ * @package
  * @copyright  2011-01-01, Campaign and Digital Intelligence Ltd
- * @license    
+ * @license
  * @author     Tim Langley
  */
 
@@ -59,7 +59,7 @@ class Rabbit_AMQP_Serialize_Decimal
                 Rabbit_Exception::ERROR_SERIALIZE_EXPONENT
             );
         }
-        
+
         $this->n = $n;
         $this->e = $e;
     }
