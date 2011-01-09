@@ -40,7 +40,7 @@ class Rabbit_Message
         'type'                     => 'shortstr',
         'user_id'                 => 'shortstr',
         'app_id'                 => 'shortstr',
-        'cluster_id'             => 'shortst'
+        'cluster_id'             => 'shortstr'
     );
 
     private $_body;
