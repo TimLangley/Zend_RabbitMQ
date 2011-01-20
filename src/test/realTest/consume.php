@@ -27,25 +27,36 @@ $autoloader->registerNamespace('Zend_');
 $autoloader->registerNamespace('Rabbit_');
 
 $arrOptions = array(  "host"    => "localhost"
-                   ,  "vhost"   => "/"
+                   ,  "vhost"   => "/CANDDi"
                    ,  "port"    => 5672
-                   ,  "username"=> "guest"
-                   ,  "password"=> "guest");
+                   ,  "username"=> "CANDDi"
+                   ,  "password"=> "abc123");
 
-$EXCHANGE 		  = 'newExchange-fan';
-$QUEUE 			    = isset($argv[1])?$argv[1]:'msgs';
-$CONSUMER_TAG 	= $QUEUE;
+$EXCHANGE 		  = 'WEB-page';
+$QUEUE 			    = isset($argv[1])?$argv[1]:'test-debug';
+$ROUTING		    = isset($argv[2])?$argv[2]:null;
 
-$rabbitConn     = new Rabbit_Connection($arrOptions);
-$rabbitQueue    = $rabbitConn->getQueue($QUEUE);
-$rabbitExchange = $rabbitConn->getExchange($EXCHANGE, Rabbit_Exchange::EXCHANGE_TYPE_FANOUT);
-$rabbitQueue->bind($EXCHANGE);
-
-function process_message($msg) {
-    echo "\n--------\n";
-    echo $msg->body;
-    echo "\n--------\n";
+class Tim {
+  private $rabbitQueue;
+  
+  public function __construct($arrOptions, $QUEUE, $EXCHANGE, $ROUTING) {
+    $rabbitConn     = new Rabbit_Connection($arrOptions);
+    $this->rabbitQueue    = $rabbitConn->getQueue($QUEUE);
+    $this->rabbitQueue->bind($EXCHANGE, $ROUTING);
+  }
+  
+  public function listen()      {
+    $callback = function($msg)  {
+      echo "\n--------\n";
+      var_dump($msg->body);
+      echo "\n--------\n";
+    };
+    $this->rabbitQueue->consume($callback,   "NOT TIM");
+  }
 }
 
-$rabbitQueue->consume('process_message', $CONSUMER_TAG);
-$rabbitConn->close();
+$objTim = new Tim($arrOptions, $QUEUE, $EXCHANGE, $ROUTING);
+$objTim->listen();
+
+
+

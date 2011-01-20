@@ -8,7 +8,9 @@
  */
 
 class Rabbit_Message 												{
-	protected static $_arrProperyTypes = array(	"content_type" 			=> "shortstr",
+	const		APPLICATION_JSON		= 'application/json';
+	
+	protected static $_arrProperyTypes 	= array("content_type" 			=> "shortstr",
 												"content_encoding" 		=> "shortstr",
 												"application_headers" 	=> "table",
 												"delivery_mode" 		=> "octet",
@@ -23,9 +25,9 @@ class Rabbit_Message 												{
 												"app_id" 				=> "shortstr",
 												"cluster_id" 			=> "shortst"
 											);
-	private $_body;
-	private $_arrProperties;
-	private $_arrDeliveryInfo;
+	private $_body 				= null;
+	private $_arrProperties		= array();
+	private $_arrDeliveryInfo	= array();
 	
 	public function __construct($body = '', $props = null)			{
 		$this->_body 			= $body;
@@ -38,7 +40,12 @@ class Rabbit_Message 												{
 		*/
 		switch($name)												{
 			case 'body':
-				return $this->_body;
+				switch($this->content_type)							{
+					case self::APPLICATION_JSON:
+						return $this->_body;
+					default:
+						return $this->_body;
+				}
 			case 'delivery_info':
 				return $this->_arrDeliveryInfo;
 			case 'delivery_tag':
@@ -47,8 +54,13 @@ class Rabbit_Message 												{
 						return $this->_arrDeliveryInfo['delivery_tag'];
 				throw new Rabbit_Exception_Message(sprintf(Rabbit_Exception_Message::ERROR_NO_PROPERTY, $name));
 			default:
-				if(array_key_exists($name,$this->_arrProperties))
+				//Firstly check if the property exists and is set
+				if(array_key_exists($name, $this->_arrProperties))
 					return $this->_arrProperties[$name];
+				//Second check if the proptery is valid (but currently not set)
+				if(array_key_exists($name, $this->_arrProperyTypes))
+					return "";
+				//Finally check if it's in the delivery info
 				if(isset($this->_arrDeliveryInfo))
 					if(array_key_exists($name,$this->_arrDeliveryInfo))
 						return $this->_arrDeliveryInfo[$name];

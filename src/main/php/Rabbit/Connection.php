@@ -210,7 +210,7 @@ class Rabbit_Connection														{
 	}
 	
 	public static function 	getDefaultConnection()							{
-		return $this->_defaultConnection;
+		return self::$_defaultConnection;
 	}
 	public function 		setDefaultConnection()							{
 		return self::$_defaultConnection = $this;

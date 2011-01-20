@@ -27,19 +27,18 @@ $autoloader->registerNamespace('Zend_');
 $autoloader->registerNamespace('Rabbit_');
 
 $arrOptions = array(  "host"    => "localhost"
-                   ,  "vhost"   => "/"
+                   ,  "vhost"   => "/CANDDi"
                    ,  "port"    => 5672
-                   ,  "username"=> "guest"
-                   ,  "password"=> "guest");
+                   ,  "username"=> "CANDDi"
+                   ,  "password"=> "abc123");
 
-$EXCHANGE 		  = 'newExchange-fan';
-$QUEUE 			    = 'msgs';
-$CONSUMER_TAG 	= 'consumer';
+$EXCHANGE 		  = 'WebAnalytics-fan1';
+$msg_body       = isset($argv[1])?$argv[1]:"quit";
+$ROUTING		    = isset($argv[2])?$argv[2]:null;
 
 $rabbitConn     = new Rabbit_Connection($arrOptions);
 $rabbitExchange = $rabbitConn->getExchange($EXCHANGE, Rabbit_Exchange::EXCHANGE_TYPE_FANOUT);
 
-$msg_body       = implode(' ', array_slice($argv, 1));
 $msg            = new Rabbit_Message($msg_body, array('content_type' => 'text/plain'));
-$rabbitExchange->publish($msg);
+$rabbitExchange->publish($msg, $ROUTING);
 $rabbitConn->close();
