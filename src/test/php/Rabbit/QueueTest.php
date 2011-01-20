@@ -112,7 +112,7 @@ class Rabbit_QueueTest extends PHPUnit_Framework_TestCase
 
         $channel->shouldReceive('basic_consume')->with(
             self::QUEUE_NAME, $consumerTag, false,
-            false, false, false, $callback, $queue
+            false, false, false, $callback
         );
 
 
