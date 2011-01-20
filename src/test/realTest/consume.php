@@ -6,7 +6,7 @@
  * @copyright  2011-01-01, Campaign and Digital Intelligence Ltd
  * @license    
  * @author     Tim Langley
- */
+**/
 
 define('Rabbit_PATH', 		realpath(dirname(__FILE__)).'/../../main/php/Rabbit');
 
@@ -57,6 +57,3 @@ class Tim {
 
 $objTim = new Tim($arrOptions, $QUEUE, $EXCHANGE, $ROUTING);
 $objTim->listen();
-
-
-

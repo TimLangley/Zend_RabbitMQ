@@ -1,142 +1,166 @@
-<?
+<?php
 /**
- * @category   
- * @package    
+ * Rabbit
+ *
+ * LICENSE
+ *
+ * This source file is subject to the new BSD license that is bundled
+ * with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://github.com/canddi/Zend_RabbitMQ/blob/master/LICENSE.txt
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to hello@canddi.com so we can send you a copy immediately.
+ *
+ */
+
+/**
+ * @category
+ * @package
  * @copyright  2011-01-01, Campaign and Digital Intelligence Ltd
- * @license    
+ * @license
  * @author     Tim Langley
  */
 
-class Rabbit_Queue																{
-	private $_amqpChannel;
-	private $_strQueueName;
-	private $_strConsumerTag;
-	
-	const	MESSAGE_CONSUME_CANCEL	= 'quit';
-	
-	public function __construct(Rabbit_AMQP_Channel $amqpChannel, 
-								$strQueueName 					= null,
-								$arrFlags						= null)			{
-	/**
-	 *	@purpose: This loads a new Rabbit_Queue (or creates one)
-	 *	@NOTE:		This is a bit ugly - because whilst this is a public constructor
-	 *					it's not possible to create these directly because can't get access to the Channel 
-	 *					(outside of the Rabbit_Connection)
-	 *	@param:		$amqpChannel
-	 *	@param:		$strName	- the Queue Name
-	 *	@param:		$arrFlags	- Associative array of flags
-	 *								"B_AMQP_AUTODELETE"	=> For exchanges, the auto delete flag indicates that the exchange will 
-	 *														be deleted as soon as no more queues are bound to it. 
-	 *														If no queues were ever bound the exchange, 
-	 *														the exchange will never be deleted
-	 *								"B_AMQP_DURABLE"	=> Durable exchanges and queues will survive a broker restart,
-	 *														complete with all of their data.
-	 *								"B_AMQP_EXCLUSIVE"	=>	Only ONE client can connect to this queue (? not valid for exchanges?)
-	 *								"B_AMQP_PASSIVE"	=> Check if Exchange exists
-	 *														Passive exchanges are queues will not be redeclared,
-	 *														the broker will throw an error if the exchange does not exist.
-	 */
-		if(is_null($strQueueName))
-			throw new Rabbit_Exception_Queue(Rabbit_Exception_Queue::ERROR_QUEUE_NAME_EMPTY);
-		if(is_null($amqpChannel))
-			throw new Rabbit_Exception_Queue(Rabbit_Exception_Queue::ERROR_CHANNEL_EMPTY);
+/**
+ * Represents a rabbit's queue.
+ */
+class Rabbit_Queue
+{
 
-			
-		$this->_strQueueName	= $strQueueName;	
-		$this->_amqpChannel		= $amqpChannel;
-		
-		$bPassive				= false;
-		$bDurable				= true;
-		$bAutoDelete			= false;
-		$bExclusive				= false;
-		if(is_array($arrFlags))												{
-			if(array_key_exists(Rabbit_Connection::B_AMQP_PASSIVE, 		$arrFlags))
-				$bPassive		= $arrFlags[Rabbit_Connection::B_AMQP_PASSIVE];
-			if(array_key_exists(Rabbit_Connection::B_AMQP_DURABLE, 		$arrFlags))
-				$bDurable		= $arrFlags[Rabbit_Connection::B_AMQP_DURABLE];
-			if(array_key_exists(Rabbit_Connection::B_AMQP_AUTODELETE, 	$arrFlags))
-				$bAutoDelete	= $arrFlags[Rabbit_Connection::B_AMQP_AUTODELETE];
-			if(array_key_exists(Rabbit_Connection::B_AMQP_EXCLUSIVE, 	$arrFlags))
-				$bExclusive		= $arrFlags[Rabbit_Connection::B_AMQP_EXCLUSIVE];
-		}
-		$this->_amqpChannel->queue_declare($this->_strQueueName, $bPassive, $bDurable, $bExclusive, $bAutoDelete);
-								}
-	private function ack(Rabbit_Message $msg)									{
-		/**
-		 *	@purpose:	This performs the message acknowledgement 
-		 *	@param:		$msg	- the message to acknowledge
-		 */
-		$strDeliveryTag			= $msg->delivery_tag;
-		$this->_amqpChannel->basic_ack($strDeliveryTag);
-	}
-	public function bind($strExchangeName, $strRoutingKey 		= null)			{
-		/**
-		 *	@purpose:	Binds this Queue to the given Exchange with the given RoutingKey
-		 *	@NOTE:		if you bind a "second" consumer to the same queue (ie queue name is the same then routing is ignored)
-		 *					and this is a "round robin" scenario
-		 *	@param:		strExchangeName		
-		 *	@param:		strRoutingKey		(as standard format) 
-		 *					#	=> bind to all
-		 *					a.b => separate words
-		 *					*.b	=> * is skip word
-		 */
-		$this->_amqpChannel->queue_bind($this->_strQueueName, $strExchangeName, $strRoutingKey);
-	}
-	public function consume ( $fnCallback
-							, $strConsumerTag
-							, $arrOptions 		= null)							{
-		/**
-		 *	@purpose:	This "sits" consuming the messages - when one arrives it calls the function $fnCallback
-		 *	@param:		fnCallback 	- a public function 
-		 */
-		$this->_strConsumerTag				= $strConsumerTag;
-		$this->_amqpChannel->basic_consume	( $this->_strQueueName
-											, $strConsumerTag
-											, false
-											, false
-											, false
-											, false
-											, $fnCallback
-											, $this);
+    /**
+     * @var Rabbit_AMQP_Channel
+     */
+    private $_amqpChannel;
 
-		// Loop as long as the channel has callbacks registered
-		while(count($this->_amqpChannel->callbacks))
-		    $this->_amqpChannel->wait();
-							}
-	public final function _consume_cb( Rabbit_Message $msg
-									, $fnUserCallback 			= null)			{
-		/**
-		 *	@purpose:	This is the "generic callback" which is called by the Channel
-		 *				This handles the message acknowledge 
-		 */
-		$this->ack($msg);
+    private $_queueName;
+    private $_consumerTag;
 
-		// Cancel callback
-		if (self::MESSAGE_CONSUME_CANCEL	=== $msg->body) 
-			return $this->consume_cancel();
-		
-		if(!is_null($fnUserCallback))
-			call_user_func($fnUserCallback, $msg);
-									}
-	public function consume_cancel()											{
-		/**
-		 *	@purpose: 	Cancels a consume call
-		 */
-		$this->_amqpChannel->basic_cancel($this->_strConsumerTag);
-	}
-	public function delete()													{
-		/**
-		 *	@purpose:	Deletes the current queue	
-		 */
-		$this->_amqpChannel->queue_delete($this->_strQueueName);
-	}
-	public function get($arrFlags = null)										{
-		return $this->_amqpChannel->basic_get($this->_strQueueName);
-	}
-	public function purge()														{
-		/**
-		 *	@purpose:	Clears the queue of any outstanding messages
-		 */	
-		$this->_amqpChannel->queue_purge($this->_strQueueName);
-	}
+    /**
+     * This loads a new Rabbit_Queue (or creates one)
+     *
+     * This is a bit ugly - because whilst this is a public constructor
+     * it's not possible to create these directly because can't get access to
+     * the Channel (outside of the Rabbit_Connection)
+     *
+     * @param Rabbit_AMQP_Channel $amqpChannel The AMQP channel to connect
+     *                                         through.
+     * @param string              $queueName   The Queue Name
+     * @param Rabbit_Flags        $flags       Flags object.
+     *
+     * @throws Rabbit_Exception_Queue
+     * @see Rabbit_Flags
+     */
+    public function __construct(Rabbit_AMQP_Channel $amqpChannel, $queueName,
+        Rabbit_Flags $flags)
+    {
+
+        if (empty($queueName)) {
+            throw new Rabbit_Exception_Queue(
+                Rabbit_Exception_Queue::ERROR_QUEUE_NAME_EMPTY
+            );
+        }
+
+        $this->_queueName   = $queueName;
+        $this->_amqpChannel = $amqpChannel;
+
+        $this->_amqpChannel->queue_declare(
+            $this->_queueName,
+            $flags->getPassive(),
+            $flags->getDurable(),
+            $flags->getExclusive(),
+            $flags->getAutodelete()
+        );
+
+    }
+
+    /**
+     * Binds this Queue to the given Exchange with the given RoutingKey
+     *
+     * If you bind a "second" consumer to the same queue (ie queue name is the
+     * same then routing is ignored) and this is a "round robin" scenario
+     *
+     * @param string $exchangeName The exchange's name.
+     * @param string $routingKey   The routing key to use.
+     *
+     * @return void
+     */
+    public function bind($exchangeName, $routingKey = null)
+    {
+        $this->_amqpChannel->queue_bind(
+            $this->_queueName, $exchangeName, $routingKey
+        );
+    }
+
+    /**
+     * This "sits" consuming the messages.
+     *
+     * When one arrives it calls the given callback.
+     *
+     * @param Closure $callback    The callback to use.
+     * @param string  $consumerTag The tag used for the consumer.
+     *
+     * @return void
+     */
+    public function consume(Closure $callback, $consumerTag)
+    {
+        $this->_consumerTag = $consumerTag;
+
+        $this->_amqpChannel->basic_consume(
+            $this->_queueName,
+            $consumerTag,
+            false,
+            false,
+            false,
+            false,
+            $callback
+        );
+
+        // Loop as long as the channel has callbacks registered.
+        while (count($this->_amqpChannel->callbacks)) {
+            $this->_amqpChannel->wait();
+        }
+
+    }
+
+    /**
+     * Cancels a consume call.
+     *
+     * @return void
+     */
+    public function consume_cancel()
+    {
+        $this->_amqpChannel->basic_cancel($this->_consumerTag);
+    }
+
+    /**
+     * Deletes the current queue.
+     *
+     * @return void
+     */
+    public function delete()
+    {
+        $this->_amqpChannel->queue_delete($this->_queueName);
+    }
+
+    /**
+     * Gets... something?
+     *
+     * @return mixed
+     */
+    public function get($arrFlags = null)
+    {
+        return $this->_amqpChannel->basic_get($this->_queueName);
+    }
+
+    /**
+     * Clears the queue of any outstanding messages.
+     *
+     * @return void
+     */
+    public function purge()
+    {
+        $this->_amqpChannel->queue_purge($this->_queueName);
+    }
+
 }
