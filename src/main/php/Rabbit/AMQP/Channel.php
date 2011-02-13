@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * Rabbit
  *
@@ -441,7 +441,7 @@ class Rabbit_AMQP_Channel extends Rabbit_AMQP_Abstract
             $consumer_tag = $this->wait(array(
                         "60,21"
                     ));
-        $this->callbacks[$consumer_tag]['Callback'] = $callback;
+        $this->callbacks[$consumer_tag] = $callback;
         return $consumer_tag;
     }
 
@@ -460,20 +460,24 @@ class Rabbit_AMQP_Channel extends Rabbit_AMQP_Abstract
 
         $msg->delivery_info =
             array(
-                "channel" => $this, "consumer_tag" => $consumer_tag,
-                "delivery_tag" => $delivery_tag,
-                "redelivered" => $redelivered, "exchange" => $exchange,
-                "routing_key" => $routing_key
+                "channel" 		=> $this,
+ 				"consumer_tag" 	=> $consumer_tag,
+                "delivery_tag" 	=> $delivery_tag,
+                "redelivered" 	=> $redelivered, 
+				"exchange" 		=> $exchange,
+                "routing_key" 	=> $routing_key
             );
 
         if (array_key_exists($consumer_tag, $this->callbacks)) {
 
             if ($msg->body == Rabbit_Message::MESSAGE_CONSUME_CANCEL) {
                 $this->basic_cancel($consumer_tag);
+				$this->basic_ack($delivery_tag);
                 return;
             }
 
-            $this->callbacks[$consumer_tag]['Callback']($msg);
+            $this->callbacks[$consumer_tag]($msg);
+			$this->basic_ack($delivery_tag);
         }
     }
 
