@@ -12,7 +12,7 @@
  * obtain it through the world-wide-web, please send an email
  * to hello@canddi.com so we can send you a copy immediately.
  *
- */
+**/
 
 /**
  * @category
@@ -20,7 +20,7 @@
  * @copyright  2011-01-01, Campaign and Digital Intelligence Ltd
  * @license
  * @author     Tim Langley
- */
+**/
 
 class Rabbit_AMQP_Channel extends Rabbit_AMQP_Abstract
 {
@@ -59,7 +59,7 @@ class Rabbit_AMQP_Channel extends Rabbit_AMQP_Abstract
     {
         /**
          * Tear down this object, after we've agreed to close with the server.
-         */
+        **/
         $this->is_open = false;
         unset($this->connection->channels[$this->channel_id]);
         $this->channel_id = $this->connection = null;
@@ -74,7 +74,7 @@ class Rabbit_AMQP_Channel extends Rabbit_AMQP_Abstract
          * the server may detect errors that need to be reported.  Fatal
          * errors are handled as channel or connection exceptions; non-
          * fatal errors are sent through this method.
-         */
+        **/
         $reply_code = $args->read_short();
         $reply_text = $args->read_shortstr();
         $details = $args->read_table();
@@ -90,7 +90,7 @@ class Rabbit_AMQP_Channel extends Rabbit_AMQP_Abstract
     {
         /**
          * request a channel close
-         */
+        **/
         $args = new Rabbit_AMQP_Serialize_Write();
         $args->write_short($reply_code);
         $args->write_shortstr($reply_text);
@@ -124,7 +124,7 @@ class Rabbit_AMQP_Channel extends Rabbit_AMQP_Abstract
     {
         /**
          * confirm a channel close
-         */
+        **/
         $this->do_close();
     }
 
@@ -132,7 +132,7 @@ class Rabbit_AMQP_Channel extends Rabbit_AMQP_Abstract
     {
         /**
          * enable/disable flow from peer
-         */
+        **/
         $args = new Rabbit_AMQP_Serialize_Write();
         $args->write_bit($active);
         $this->send_method_frame(array(
@@ -470,7 +470,7 @@ class Rabbit_AMQP_Channel extends Rabbit_AMQP_Abstract
 
         if (array_key_exists($consumer_tag, $this->callbacks)) {
 
-            if ($msg->body == Rabbit_Message::MESSAGE_CONSUME_CANCEL) {
+            if ($msg->getBody() == Rabbit_Message::MESSAGE_CONSUME_CANCEL) {
                 $this->basic_cancel($consumer_tag);
 				$this->basic_ack($delivery_tag);
                 return;
@@ -537,8 +537,8 @@ class Rabbit_AMQP_Channel extends Rabbit_AMQP_Abstract
             ), $args);
 
         $this->connection
-            ->send_content($this->channel_id, 60, 0, strlen($msg->body),
-                $msg->serialize_properties(), $msg->body);
+            ->send_content($this->channel_id, 60, 0, strlen($msg->getBody()),
+                $msg->serialize_properties(), $msg->getBody());
     }
 
     public function basic_qos($prefetch_size, $prefetch_count, $a_global)

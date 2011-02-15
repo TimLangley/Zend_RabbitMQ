@@ -75,6 +75,75 @@ class Rabbit_Message
         $this->_properties = $props;
     }
 
+	public function getBody()
+	{
+		return $this->_body;
+	}
+	public function getContentType()
+	{
+		if (isset($this->_properties)) {
+            if (array_key_exists(
+                'content_type',
+                $this->_properties
+            )) {
+                return $this->_properties['content_type'];
+            }
+        }
+		return null;
+	}
+	public function getDeliveryInfo()
+	{
+		return $this->_deliveryInfo;
+	}
+	public function getDeliveryTag()
+	{
+		if (isset($this->_properties)) {
+            if (array_key_exists(
+                'delivery_tag',
+                $this->_deliveryInfo
+            )) {
+                return $this->_deliveryInfo['delivery_tag'];
+            }
+        }
+		return null;
+	}
+	public function getMessageId()
+	{
+		if (isset($this->_properties)) {
+            if (array_key_exists(
+                'message_id',
+                $this->_properties
+            )) {
+                return $this->_properties['message_id'];
+            }
+        }
+		return null;
+	}
+	public function getRoutingKey()
+	{
+		if (isset($this->_properties)) {
+            if (array_key_exists(
+                'routing_key',
+                $this->_deliveryInfo
+            )) {
+                return $this->_deliveryInfo['routing_key'];
+            }
+        }
+		return null;
+	}
+	public function getType()
+	{
+		if (isset($this->_properties)) {
+            if (array_key_exists(
+                'type',
+                $this->_properties
+            )) {
+                return $this->_properties['type'];
+            }
+        }
+		return null;
+	}
+	
     /**
      * Retrieves the message's properties.
      *
@@ -86,52 +155,17 @@ class Rabbit_Message
     **/
     public function __get($name)
     {
-        /**
-          * Look for additional properties in the 'properties' dictionary,
-         * and if present - the 'delivery_info' dictionary.
-        **/
-        switch($name) {
-            case 'body':
-                return $this->_body;
+		if (array_key_exists($name, $this->_properties)) {
+			return $this->_properties[$name];
+		}
 
-            case 'delivery_info':
-                return $this->_deliveryInfo;
+		if (isset($this->_deliveryInfo)) {
+			if (array_key_exists($name, $this->_deliveryInfo)) {
+				return $this->_deliveryInfo[$name];
+			}
+		}
 
-            case 'delivery_tag':
-                if (isset($this->_deliveryInfo)) {
-                    if (array_key_exists(
-                        'delivery_tag',
-                        $this->_deliveryInfo
-                    )) {
-                        return $this->_deliveryInfo['delivery_tag'];
-                    }
-
-                    throw new Rabbit_Exception_Message(
-                        sprintf(
-                            Rabbit_Exception_Message::ERROR_NO_PROPERTY,
-                            $name
-                        )
-                    );
-                }
-
-            default:
-                if (array_key_exists($name, $this->_properties)) {
-                    return $this->_properties[$name];
-                }
-
-                if (isset($this->_deliveryInfo)) {
-                    if (array_key_exists($name, $this->_deliveryInfo)) {
-                        return $this->_deliveryInfo[$name];
-                    }
-                }
-
-                throw new Rabbit_Exception_Message(
-                    sprintf(
-                        Rabbit_Exception_Message::ERROR_NO_PROPERTY,
-                        $name
-                    )
-                );
-        }
+		throw new Rabbit_Exception_Message(sprintf(Rabbit_Exception_Message::ERROR_NO_PROPERTY,$name));
     }
 
     /**

@@ -12,7 +12,7 @@
  * obtain it through the world-wide-web, please send an email
  * to hello@canddi.com so we can send you a copy immediately.
  *
- */
+**/
 
 /**
  * @category
@@ -20,11 +20,11 @@
  * @copyright  2011-01-01, Campaign and Digital Intelligence Ltd
  * @license
  * @author     Tim Langley
- */
+**/
 
 /**
  * Rabbit generic exception.
- */
+**/
 class Rabbit_Exception extends Exception
 {
     const ERROR_CONNECTING = 'Error Connecting to server(%d): %s';

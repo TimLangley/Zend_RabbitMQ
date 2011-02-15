@@ -12,7 +12,7 @@
  * obtain it through the world-wide-web, please send an email
  * to hello@canddi.com so we can send you a copy immediately.
  *
- */
+**/
 
 /**
  * @category
@@ -20,11 +20,11 @@
  * @copyright  2011-01-01, Campaign and Digital Intelligence Ltd
  * @license
  * @author     Tim Langley
- */
+**/
 
 /**
  * Represents a rabbit exchange.
- */
+**/
 class Rabbit_Exchange
 {
     const EXCHANGE_TYPE_DIRECT = 'direct';
@@ -58,7 +58,7 @@ class Rabbit_Exchange
      *
      * @throws Rabbit_Exception_Exchange
      * @see Rabbit_Flags
-     */
+    **/
     public function __construct(Rabbit_AMQP_Channel $amqpChannel, $name, $type,
         Rabbit_Flags $flags = null)
     {
@@ -72,7 +72,7 @@ class Rabbit_Exchange
         if (is_null($type)) {
             $type = self::EXCHANGE_TYPE_DIRECT;
         } else {
-            if (array_search($type, self::$_arrExchangeTypes) === false) {
+            if (false === array_search($type, self::$_arrExchangeTypes)) {
                 throw new Rabbit_Exception_Exchange(
                     sprintf(
                         Rabbit_Exception_Exchange::ERROR_UNKNOWN_EXCHANGE_TYPE,
@@ -108,7 +108,7 @@ class Rabbit_Exchange
      * @param string $routingKey The routing key to use.
      *
      * @return void
-     */
+    **/
     public function bind($queueName, $routingKey = null)
     {
         $this->_amqpChannel->queue_bind(
@@ -120,11 +120,31 @@ class Rabbit_Exchange
      * Deletes this exchange.
      *
      * @return void
-     */
+    **/
     public function delete()
     {
         $this->_amqpChannel->exchange_delete($this->_exchangeName);
     }
+	
+	/**
+     * Returns the Exchange Name
+     *
+     * @return string
+    **/
+	public function getExchangeName()
+	{
+		return $this->_exchangeName;
+	}
+
+	/**
+     * Returns the Exchange Type
+     *
+     * @return string
+    **/
+	public function getExchangeType()
+	{
+		return $this->_exchangeType;
+	}
 
     /**
      * Publishes the given message to this exchange.
@@ -133,7 +153,7 @@ class Rabbit_Exchange
      * @param string         $routingKey The routing key to use.
      *
      * @return void
-     */
+    **/
     public function publish(Rabbit_Message $message, $routingKey = null)
     {
         $this->_amqpChannel->basic_publish(

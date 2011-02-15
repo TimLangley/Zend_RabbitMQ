@@ -12,7 +12,7 @@
  * obtain it through the world-wide-web, please send an email
  * to hello@canddi.com so we can send you a copy immediately.
  *
- */
+**/
 
 /**
  * @category
@@ -20,11 +20,11 @@
  * @copyright  2011-01-01, Campaign and Digital Intelligence Ltd
  * @license
  * @author Franco Zeoli
- */
+**/
 
 /**
  * Model object to simplify the flags passing.
- */
+**/
 class Rabbit_Flags
 {
 
@@ -32,7 +32,7 @@ class Rabbit_Flags
      * Protocol flag. No idea what it does!
      *
      * @var string
-     */
+    **/
     const B_AMQP_ACTIVE = 'CONN_Active';
 
     /**
@@ -42,7 +42,7 @@ class Rabbit_Flags
      * deleted.
      *
      * @var string
-     */
+    **/
     const B_AMQP_AUTODELETE = 'CONN_AutoDelete';
 
     /**
@@ -50,7 +50,7 @@ class Rabbit_Flags
      * restart, complete with all of their data.
      *
      * @var string
-     */
+    **/
     const B_AMQP_DURABLE = 'CONN_Durable';
 
     // @FIXME: not valid for exchanges?
@@ -58,7 +58,7 @@ class Rabbit_Flags
      * Protocol flag. Only ONE client can connect to this queue.
      *
      * @var string
-     */
+    **/
     const B_AMQP_EXCLUSIVE = 'CONN_Exclusive';
 
     /**
@@ -67,20 +67,20 @@ class Rabbit_Flags
      * does not exist.
      *
      * @var string
-     */
+    **/
     const B_AMQP_PASSIVE = 'CONN_Passive';
 
-    private $_passive = false;
-    private $_durable = true;
-    private $_autodelete = false;
-    private $_exclusive = false;
-    private $_active = true;
+    private $_passive 		= false;
+    private $_durable 		= true;
+    private $_autodelete 	= false;
+    private $_exclusive 	= false;
+    private $_active 		= true;
 
     /**
      * Creates a new flag object.
      *
      * @param array|Zend_Config $flags The flags to use.
-     */
+    **/
     public function __construct($flags = array())
     {
         if ($flags instanceof Zend_Config) {
@@ -112,50 +112,75 @@ class Rabbit_Flags
      * Checks whether the passive flag is set, or not.
      *
      * @return bool
-     */
+    **/
     public function getPassive()
     {
         return $this->_passive;
     }
-
+	public function setPassive($bPassive = false)
+    {
+        $this->_passive	= $bPassive;
+		return $this;
+    }
+	
     /**
      * Checks whether the durable flag is set, or not.
      *
      * @return bool
-     */
+    **/
     public function getDurable()
     {
         return $this->_durable;
+    }
+	public function setDurable($bDurable = false)
+    {
+        $this->_durable	= $bPassive;
+		return $this;
     }
 
     /**
      * Checks whether the autodelete flag is set, or not.
      *
      * @return bool
-     */
+    **/
     public function getAutodelete()
     {
         return $this->_autodelete;
+    }
+	public function setAutodelete($bAutoDelete = false)
+    {
+        $this->_autodelete	= $bAutoDelete;
+		return $this;
     }
 
     /**
      * Checks whether the exclusive flag is set, or not.
      *
      * @return bool
-     */
+    **/
     public function getExclusive()
     {
         return $this->_exclusive;
+    }
+	public function setExclusive($bExclusive = false)
+    {
+        $this->_exclusive	= $bExclusive;
+		return $this;
     }
 
     /**
      * Checks whether the active flag is set, or not.
      *
      * @return bool
-     */
+    **/
     public function getActive()
     {
         return $this->_active;
+    }
+	public function setActive($bActive = false)
+    {
+        $this->_active	= $bActive;
+		return $this;
     }
 
 }

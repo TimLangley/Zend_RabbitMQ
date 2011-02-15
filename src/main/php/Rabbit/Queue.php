@@ -12,7 +12,7 @@
  * obtain it through the world-wide-web, please send an email
  * to hello@canddi.com so we can send you a copy immediately.
  *
- */
+**/
 
 /**
  * @category
@@ -20,17 +20,17 @@
  * @copyright  2011-01-01, Campaign and Digital Intelligence Ltd
  * @license
  * @author     Tim Langley
- */
+**/
 
 /**
  * Represents a rabbit's queue.
- */
+**/
 class Rabbit_Queue
 {
 
     /**
      * @var Rabbit_AMQP_Channel
-     */
+    **/
     private $_amqpChannel;
 
     private $_queueName;
@@ -50,7 +50,7 @@ class Rabbit_Queue
      *
      * @throws Rabbit_Exception_Queue
      * @see Rabbit_Flags
-     */
+    **/
     public function __construct(Rabbit_AMQP_Channel $amqpChannel, $queueName,
         Rabbit_Flags $flags)
     {
@@ -84,7 +84,7 @@ class Rabbit_Queue
      * @param string $routingKey   The routing key to use.
      *
      * @return void
-     */
+    **/
     public function bind($exchangeName, $routingKey = null)
     {
         $this->_amqpChannel->queue_bind(
@@ -101,7 +101,7 @@ class Rabbit_Queue
      * @param string  $consumerTag The tag used for the consumer.
      *
      * @return void
-     */
+    **/
     public function consume(Closure $callback, $consumerTag)
     {
         $this->_consumerTag = $consumerTag;
@@ -127,7 +127,7 @@ class Rabbit_Queue
      * Cancels a consume call.
      *
      * @return void
-     */
+    **/
     public function consume_cancel()
     {
         $this->_amqpChannel->basic_cancel($this->_consumerTag);
@@ -137,7 +137,7 @@ class Rabbit_Queue
      * Deletes the current queue.
      *
      * @return void
-     */
+    **/
     public function delete()
     {
         $this->_amqpChannel->queue_delete($this->_queueName);
@@ -147,17 +147,22 @@ class Rabbit_Queue
      * Gets... something?
      *
      * @return mixed
-     */
+    **/
     public function get($arrFlags = null)
     {
         return $this->_amqpChannel->basic_get($this->_queueName);
     }
 
+	public function getQueueName()
+	{
+		return $this->_queueName;
+	}
+
     /**
      * Clears the queue of any outstanding messages.
      *
      * @return void
-     */
+    **/
     public function purge()
     {
         $this->_amqpChannel->queue_purge($this->_queueName);

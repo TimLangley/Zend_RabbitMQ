@@ -12,7 +12,7 @@
  * obtain it through the world-wide-web, please send an email
  * to hello@canddi.com so we can send you a copy immediately.
  *
- */
+**/
 
 /**
  * @category Rabbit   
@@ -21,12 +21,12 @@
  * @copyright
  * @license    
  * @author   Franco Zeoli
- */
+**/
 
 /**
  * Provides an utility class for ocasions where a countable thingy is needed,
  * and decrements each time the count is consulted.
- */
+**/
 class Rabbit_QueueTest_DecrementingCountable implements Countable
 {
 	private $_count;
@@ -35,7 +35,7 @@ class Rabbit_QueueTest_DecrementingCountable implements Countable
 	 * Creates a new decrementing countable with the amount of items given.
 	 * 
 	 * @param int $count The initial amount.
-	 */
+	**/
 	public function __construct($count = 1)
 	{
 		$this->_count = $count;
@@ -44,7 +44,7 @@ class Rabbit_QueueTest_DecrementingCountable implements Countable
 	/**
 	 * (non-PHPdoc)
 	 * @see Countable::count()
-	 */
+	**/
 	public function count ()
 	{
 		if ($this->_count < 0) {

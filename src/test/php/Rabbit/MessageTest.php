@@ -12,7 +12,7 @@
  * obtain it through the world-wide-web, please send an email
  * to hello@canddi.com so we can send you a copy immediately.
  *
- */
+**/
 
 /**
  * @category Rabbit
@@ -20,7 +20,7 @@
  * @copyright
  * @license
  * @author   Franco Zeoli
- */
+**/
 class Rabbit_MessageTest extends PHPUnit_Framework_TestCase
 {
     const QUEUE_NAME = 'test';
@@ -29,34 +29,34 @@ class Rabbit_MessageTest extends PHPUnit_Framework_TestCase
      * Tests the constructor method.
      *
      * @return void
-     */
+    **/
     public function testConstructor()
     {
         $msg = new Rabbit_Message('body', array('type' => 'test'));
 
-        $this->assertEquals('body', $msg->body);
-        $this->assertEquals('test', $msg->type);
+        $this->assertEquals('body', $msg->getBody());
+        $this->assertEquals('test', $msg->getType());
     }
 
     /**
      * Tests the load_properties method.
      *
      * @return void
-     */
+    **/
     public function testLoadProperties()
     {
         $msg = new Rabbit_Message();
         $msg->load_properties(base64_decode('gIAQYXBwbGljYXRpb24vanNvbgEx'));
 
-        $this->assertEquals('application/json', $msg->content_type);
-        $this->assertEquals(1, $msg->message_id);
+        $this->assertEquals('application/json', $msg->getContentType());
+        $this->assertEquals(1, $msg->getMessageId());
     }
 
     /**
      * Tests the serialize_properties method.
      *
      * @return void
-     */
+    **/
     public function testSerializeProperties()
     {
         $msg = new Rabbit_Message(
@@ -78,15 +78,15 @@ class Rabbit_MessageTest extends PHPUnit_Framework_TestCase
      * Tests the __set method.
      *
      * @return void
-     */
+    **/
     public function testMagicSet()
     {
         $msg = new Rabbit_Message();
         $msg->delivery_info = 'delivery';
         $msg->body = 'body';
 
-        $this->assertEquals('delivery', $msg->delivery_info);
-        $this->assertEquals('body', $msg->body);
+        $this->assertEquals('delivery', $msg->getDeliveryInfo());
+        $this->assertEquals('body', 	$msg->getBody());
 
         $caught = false;
         try {

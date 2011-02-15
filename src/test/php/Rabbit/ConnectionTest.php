@@ -12,7 +12,7 @@
  * obtain it through the world-wide-web, please send an email
  * to hello@canddi.com so we can send you a copy immediately.
  *
- */
+**/
 
 /**
  * @category
@@ -20,7 +20,7 @@
  * @copyright  2011-01-01, Campaign and Digital Intelligence Ltd
  * @license
  * @author     Tim Langley
- */
+**/
 class Rabbit_ConnectionTest extends PHPUnit_Framework_TestCase
 {
 
@@ -28,7 +28,7 @@ class Rabbit_ConnectionTest extends PHPUnit_Framework_TestCase
      * Tears down the test.
      *
      * @return void
-     */
+    **/
     public function teardown()
     {
         Mockery::close();
@@ -38,7 +38,7 @@ class Rabbit_ConnectionTest extends PHPUnit_Framework_TestCase
      * Tests the getQueue method.
      *
      * @return void
-     */
+    **/
     public function testGetQueue()
     {
         $channel = Mockery::mock('Rabbit_AMQP_Channel');
@@ -66,7 +66,7 @@ class Rabbit_ConnectionTest extends PHPUnit_Framework_TestCase
      * Tests the getExchange method.
      *
      * @return void
-     */
+    **/
     public function testGetExchange()
     {
         $channel = Mockery::mock('Rabbit_AMQP_Channel');

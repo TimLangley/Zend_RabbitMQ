@@ -12,7 +12,7 @@
  * obtain it through the world-wide-web, please send an email
  * to hello@canddi.com so we can send you a copy immediately.
  *
- */
+**/
 
 /**
  * @category Rabbit
@@ -20,7 +20,7 @@
  * @copyright
  * @license
  * @author   Franco Zeoli
- */
+**/
 class Rabbit_QueueTest extends PHPUnit_Framework_TestCase
 {
     const QUEUE_NAME = 'test';
@@ -29,7 +29,7 @@ class Rabbit_QueueTest extends PHPUnit_Framework_TestCase
      * Tears down the test.
      *
      * @return void
-     */
+    **/
     public function teardown()
     {
         Mockery::close();
@@ -39,7 +39,7 @@ class Rabbit_QueueTest extends PHPUnit_Framework_TestCase
      * Tests the queue's constructor.
      *
      * @return void
-     */
+    **/
     public function testConstruct()
     {
         $channel = $this->_getCommonChannelMock();
@@ -66,7 +66,7 @@ class Rabbit_QueueTest extends PHPUnit_Framework_TestCase
      * Tests the bind method.
      *
      * @return void
-     */
+    **/
     public function testBind()
     {
         $channel = $this->_getCommonChannelMock();
@@ -91,7 +91,7 @@ class Rabbit_QueueTest extends PHPUnit_Framework_TestCase
      * Tests the consume method.
      *
      * @return void
-     */
+    **/
     public function testConsume()
     {
         $consumerTag = 'test';
@@ -100,7 +100,7 @@ class Rabbit_QueueTest extends PHPUnit_Framework_TestCase
         /**
          * One "callback" call. I know this is ugly and it's a hack, but
          * Mockery doesn't give a way for mocking properties, yet.
-         */
+        **/
         $channel->callbacks = new Rabbit_QueueTest_DecrementingCountable(1);
 
         $queue = new Rabbit_Queue(
@@ -125,7 +125,7 @@ class Rabbit_QueueTest extends PHPUnit_Framework_TestCase
      * Tests the consume_cancel method.
      *
      * @return void
-     */
+    **/
     public function testConsumeCancel()
     {
         $channel = $this->_getCommonChannelMock();
@@ -139,7 +139,7 @@ class Rabbit_QueueTest extends PHPUnit_Framework_TestCase
          * variable that is initialized when consume() is called, its value
          * should change. But testing that would require more effort than the
          * what I'm willing to put in this. This is okay for now.
-         */
+        **/
         $channel->shouldReceive('basic_cancel')->with(null)->once();
 
         $queue->consume_cancel();
@@ -149,7 +149,7 @@ class Rabbit_QueueTest extends PHPUnit_Framework_TestCase
      * Tests the delete method.
      *
      * @return void
-     */
+    **/
     public function testDelete()
     {
         $channel = $this->_getCommonChannelMock();
@@ -166,7 +166,7 @@ class Rabbit_QueueTest extends PHPUnit_Framework_TestCase
      * Tests the get method.
      *
      * @return void
-     */
+    **/
     public function testGet()
     {
         $channel = $this->_getCommonChannelMock();
@@ -184,7 +184,7 @@ class Rabbit_QueueTest extends PHPUnit_Framework_TestCase
      * Tests the purge method.
      *
      * @return void
-     */
+    **/
     public function testPurge()
     {
         $channel = $this->_getCommonChannelMock();
@@ -201,7 +201,7 @@ class Rabbit_QueueTest extends PHPUnit_Framework_TestCase
      * Generates a common {@link Rabbit_AMQP_Channel} mock for testing use.
      *
      * @return \Mockery\MockInterface
-     */
+    **/
     private function _getCommonChannelMock()
     {
         $channel = Mockery::mock('Rabbit_AMQP_Channel');
@@ -216,7 +216,7 @@ class Rabbit_QueueTest extends PHPUnit_Framework_TestCase
      * Generates a {@link Rabbit_Flags} common mock, with default flags set.
      *
      * @return Rabbit_Flags
-     */
+    **/
     private function _getCommonFlagsMock()
     {
         $mock = Mockery::mock('Rabbit_Flags');

@@ -12,7 +12,7 @@
  * obtain it through the world-wide-web, please send an email
  * to hello@canddi.com so we can send you a copy immediately.
  *
- */
+**/
 
 /**
  * @category Rabbit
@@ -20,7 +20,7 @@
  * @copyright
  * @license
  * @author   Franco Zeoli
- */
+**/
 class Rabbit_ExchangeTest extends PHPUnit_Framework_TestCase
 {
 
@@ -31,7 +31,7 @@ class Rabbit_ExchangeTest extends PHPUnit_Framework_TestCase
      * Tears down the test.
      *
      * @return void
-     */
+    **/
     public function teardown()
     {
         Mockery::close();
@@ -41,7 +41,7 @@ class Rabbit_ExchangeTest extends PHPUnit_Framework_TestCase
      * Tests the constructor method.
      *
      * @return void
-     */
+    **/
     public function testConstruct()
     {
         $channel = $this->_getCommonChannelMock();
@@ -121,7 +121,7 @@ class Rabbit_ExchangeTest extends PHPUnit_Framework_TestCase
      * Tests the bind method.
      *
      * @return void
-     */
+    **/
     public function testBind()
     {
         $queueName = 'test';
@@ -143,7 +143,7 @@ class Rabbit_ExchangeTest extends PHPUnit_Framework_TestCase
      * Tests the delete method.
      *
      * @return void
-     */
+    **/
     public function testDelete()
     {
         $channel = $this->_getCommonChannelMock();
@@ -161,7 +161,7 @@ class Rabbit_ExchangeTest extends PHPUnit_Framework_TestCase
      * Tests the publish method.
      *
      * @return void
-     */
+    **/
     public function testPublish()
     {
         $routingKey = '*';
@@ -183,7 +183,7 @@ class Rabbit_ExchangeTest extends PHPUnit_Framework_TestCase
      * Generates a common {@link Rabbit_AMQP_Channel} mock for testing use.
      *
      * @return \Mockery\MockInterface
-     */
+    **/
     private function _getCommonChannelMock()
     {
         $channel = Mockery::mock('Rabbit_AMQP_Channel');
@@ -202,7 +202,7 @@ class Rabbit_ExchangeTest extends PHPUnit_Framework_TestCase
      * Generates a {@link Rabbit_Flags} common mock, with default flags set.
      *
      * @return Rabbit_Flags
-     */
+    **/
     private function _getCommonFlagsMock()
     {
         $mock = Mockery::mock('Rabbit_Flags');

@@ -12,7 +12,7 @@
  * obtain it through the world-wide-web, please send an email
  * to hello@canddi.com so we can send you a copy immediately.
  *
- */
+**/
 
 /**
  * @category
@@ -20,7 +20,7 @@
  * @copyright  2011-01-01, Campaign and Digital Intelligence Ltd
  * @license
  * @author     Tim Langley
- */
+**/
 
 class Rabbit_AMQP_Connection extends Rabbit_AMQP_Abstract
 {
@@ -214,7 +214,7 @@ class Rabbit_AMQP_Connection extends Rabbit_AMQP_Abstract
 
     /**
      * Wait for a frame from the server
-     */
+    **/
 
     protected function wait_frame()
     {
@@ -236,7 +236,7 @@ class Rabbit_AMQP_Connection extends Rabbit_AMQP_Abstract
     /**
      * Wait for a frame from the server destined for
      * a particular channel.
-     */
+    **/
 
     protected function wait_channel($channel_id)
     {
@@ -265,7 +265,7 @@ class Rabbit_AMQP_Connection extends Rabbit_AMQP_Abstract
     /**
      * Fetch a Channel object identified by the numeric channel_id, or
      * create that object if it doesn't already exist.
-     */
+    **/
 
     public function channel($channel_id = null)
     {
@@ -277,7 +277,7 @@ class Rabbit_AMQP_Connection extends Rabbit_AMQP_Abstract
 
     /**
      * request a connection close
-     */
+    **/
 
     public function close($reply_code = 0, $reply_text = "",
         $method_sig = array(
@@ -312,7 +312,7 @@ class Rabbit_AMQP_Connection extends Rabbit_AMQP_Abstract
 
     /**
      * confirm a connection close
-     */
+    **/
 
     protected function x_close_ok()
     {
@@ -324,7 +324,7 @@ class Rabbit_AMQP_Connection extends Rabbit_AMQP_Abstract
 
     /**
      * confirm a connection close
-     */
+    **/
 
     protected function close_ok($args)
     {
@@ -350,7 +350,7 @@ class Rabbit_AMQP_Connection extends Rabbit_AMQP_Abstract
 
     /**
      * signal that the connection is ready
-     */
+    **/
 
     protected function open_ok($args)
     {
@@ -361,7 +361,7 @@ class Rabbit_AMQP_Connection extends Rabbit_AMQP_Abstract
 
     /**
      * asks the client to use a different server
-     */
+    **/
 
     protected function redirect($args)
     {
@@ -373,7 +373,7 @@ class Rabbit_AMQP_Connection extends Rabbit_AMQP_Abstract
 
     /**
      * security mechanism challenge
-     */
+    **/
 
     protected function secure($args)
     {
@@ -382,7 +382,7 @@ class Rabbit_AMQP_Connection extends Rabbit_AMQP_Abstract
 
     /**
      * security mechanism response
-     */
+    **/
 
     protected function x_secure_ok($response)
     {
@@ -395,7 +395,7 @@ class Rabbit_AMQP_Connection extends Rabbit_AMQP_Abstract
 
     /**
      * start connection negotiation
-     */
+    **/
 
     protected function start($args)
     {
@@ -421,7 +421,7 @@ class Rabbit_AMQP_Connection extends Rabbit_AMQP_Abstract
 
     /**
      * propose connection tuning parameters
-     */
+    **/
 
     protected function tune($args)
     {
@@ -438,7 +438,7 @@ class Rabbit_AMQP_Connection extends Rabbit_AMQP_Abstract
 
     /**
      * negotiate connection tuning parameters
-     */
+    **/
 
     protected function x_tune_ok($channel_max, $frame_max, $heartbeat)
     {

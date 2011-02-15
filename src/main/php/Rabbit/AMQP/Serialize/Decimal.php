@@ -12,7 +12,7 @@
  * obtain it through the world-wide-web, please send an email
  * to hello@canddi.com so we can send you a copy immediately.
  *
- */
+**/
 
 /**
  * @category
@@ -20,7 +20,7 @@
  * @copyright  2011-01-01, Campaign and Digital Intelligence Ltd
  * @license
  * @author     Tim Langley
- */
+**/
 
 /**
  * AMQP protocol serialization/deserialization to/from wire format.
@@ -33,7 +33,7 @@
  * code, please read first the following article:
  *
  * http://www.mysqlperformanceblog.com/2007/03/27/integers-in-php-running-with-scissors-and-portability/
- */
+**/
 
 /**
  * AMQP protocol decimal value.
@@ -45,7 +45,7 @@
  * not intended to support floating point values, but rather
  * business values such as currency rates and amounts. The
  * 'decimals' octet is not signed.
- */
+**/
 
 class Rabbit_AMQP_Serialize_Decimal
 {

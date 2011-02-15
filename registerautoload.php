@@ -12,10 +12,10 @@
  * obtain it through the world-wide-web, please send an email
  * to hello@canddi.com so we can send you a copy immediately.
  *
- */
+**/
 /**
  *	This is used in the Testing and Validation phase of the mvn test
- */	
+**/	
 
 define('RABBIT_PATH', 		realpath(dirname(__FILE__)).'/src/main/php/Rabbit');
 define('RABBIT_TEST_PATH',	realpath(dirname(__FILE__)).'/src/test/php/Rabbit/');

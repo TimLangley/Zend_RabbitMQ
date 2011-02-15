@@ -12,7 +12,7 @@
  * obtain it through the world-wide-web, please send an email
  * to hello@canddi.com so we can send you a copy immediately.
  *
- */
+**/
 
 /**
  * @category
@@ -20,7 +20,7 @@
  * @copyright  2011-01-01, Campaign and Digital Intelligence Ltd
  * @license
  * @author     Tim Langley
- */
+**/
 
 class Rabbit_AMQP_Abstract
 {
@@ -188,7 +188,7 @@ class Rabbit_AMQP_Abstract
          * Wait for some expected AMQP methods and dispatch to them.
          * Unexpected methods are queued up for later calls to this Python
          * method.
-         */
+        **/
         //Process deferred methods
         foreach ($this->method_queue as $qk => $queued_method) {
             $method_sig = $queued_method[0];

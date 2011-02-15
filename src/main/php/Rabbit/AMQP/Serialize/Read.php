@@ -12,7 +12,7 @@
  * obtain it through the world-wide-web, please send an email
  * to hello@canddi.com so we can send you a copy immediately.
  *
- */
+**/
 
 /**
  * @category
@@ -20,7 +20,7 @@
  * @copyright  2011-01-01, Campaign and Digital Intelligence Ltd
  * @license
  * @author     Tim Langley
- */
+**/
 
 class Rabbit_AMQP_Serialize_Read
 {
@@ -146,7 +146,7 @@ class Rabbit_AMQP_Serialize_Read
          * -2^31...+2^31 range.
          *
          * Use with caution!
-         */
+        **/
         list(, $res) = unpack('N', $this->rawread(4));
 
         if ($this->is64bits) {
@@ -198,7 +198,7 @@ class Rabbit_AMQP_Serialize_Read
         /**
          * Read a utf-8 encoded string that's stored in up to
          * 255 bytes.  Return it decoded as a Python unicode object.
-         */
+        **/
         $this->bitcount = $this->bits = 0;
         list(, $slen) = unpack('C', $this->rawread(1));
 
@@ -211,7 +211,7 @@ class Rabbit_AMQP_Serialize_Read
          * Read a string that's up to 2**32 bytes, the encoding
          * isn't specified in the AMQP spec, so just return it as
          * a plain PHP string.
-         */
+        **/
         $this->bitcount = $this->bits = 0;
         $slen = $this->read_php_int();
 
@@ -229,7 +229,7 @@ class Rabbit_AMQP_Serialize_Read
         /**
          * Read and AMQP timestamp, which is a 64-bit integer representing
          * seconds since the Unix epoch in 1-second resolution.
-         */
+        **/
         return $this->read_longlong();
     }
 
@@ -238,7 +238,7 @@ class Rabbit_AMQP_Serialize_Read
         /**
          * Read an AMQP table, and return as a PHP array. keys are strings,
          * values are (type,value) tuples.
-         */
+        **/
         $this->bitcount = $this->bits = 0;
         $tlen = $this->read_php_int();
 

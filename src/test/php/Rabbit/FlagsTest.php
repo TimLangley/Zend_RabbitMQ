@@ -12,7 +12,7 @@
  * obtain it through the world-wide-web, please send an email
  * to hello@canddi.com so we can send you a copy immediately.
  *
- */
+**/
 
 /**
  * @category Rabbit
@@ -20,7 +20,7 @@
  * @copyright
  * @license
  * @author   Franco Zeoli
- */
+**/
 class Rabbit_FlagsTest extends PHPUnit_Framework_TestCase
 {
 
@@ -28,7 +28,7 @@ class Rabbit_FlagsTest extends PHPUnit_Framework_TestCase
      * Super test that tests the class entirely.
      *
      * @return void
-     */
+    **/
     public function testAll()
     {
         $flags = new Rabbit_Flags(

@@ -12,7 +12,7 @@
  * obtain it through the world-wide-web, please send an email
  * to hello@canddi.com so we can send you a copy immediately.
  *
- */
+**/
 
 /**
  * @category
@@ -20,7 +20,7 @@
  * @copyright  2011-01-01, Campaign and Digital Intelligence Ltd
  * @license
  * @author     Tim Langley
- */
+**/
 
 /**
  * AMQP protocol serialization/deserialization to/from wire format.
@@ -33,7 +33,7 @@
  * code, please read first the following article:
  *
  * http://www.mysqlperformanceblog.com/2007/03/27/integers-in-php-running-with-scissors-and-portability/
- */
+**/
 
 /**
  * AMQP protocol decimal value.
@@ -45,7 +45,7 @@
  * not intended to support floating point values, but rather
  * business values such as currency rates and amounts. The
  * 'decimals' octet is not signed.
- */
+**/
 
 class Rabbit_AMQP_Serialize_Write
 {
@@ -64,7 +64,7 @@ class Rabbit_AMQP_Serialize_Write
         /**
          * Splits number (could be either int or string) into array of byte
          * values (represented as integers) in big-endian byte order.
-         */
+        **/
         if (is_int($x)) {
             if ($x < 0) {
                 $x = sprintf("%u", $x);
@@ -99,7 +99,7 @@ class Rabbit_AMQP_Serialize_Write
     {
         /**
          * Get what's been encoded so far.
-         */
+        **/
         $this->flushbits();
 
         return $this->out;
@@ -109,7 +109,7 @@ class Rabbit_AMQP_Serialize_Write
     {
         /**
          * Write a plain Python string, with no special encoding.
-         */
+        **/
         $this->flushbits();
         $this->out .= $s;
     }
@@ -118,7 +118,7 @@ class Rabbit_AMQP_Serialize_Write
     {
         /**
          * Write a boolean value.
-         */
+        **/
         $b = $b ? 1 : 0;
 
         $shift = $this->bitcount % 8;
@@ -139,7 +139,7 @@ class Rabbit_AMQP_Serialize_Write
     {
         /**
          * Write an integer as an unsigned 8-bit value.
-         */
+        **/
         if ($n < 0 || $n > 255) {
             throw new Rabbit_Exception(
                 Rabbit_Exception::ERROR_SERIALIZE_NOT_OCTAL
@@ -154,7 +154,7 @@ class Rabbit_AMQP_Serialize_Write
     {
         /**
          * Write an integer as an unsigned 16-bit value.
-         */
+        **/
         if ($n < 0 || $n > 65535) {
             throw new Rabbit_Exception(
                 Rabbit_Exception::ERROR_SERIALIZE_NOT_INTEGER
@@ -169,7 +169,7 @@ class Rabbit_AMQP_Serialize_Write
     {
         /**
          * Write an integer as an unsigned 32-bit value.
-         */
+        **/
         $this->flushbits();
         $this->out .= implode("", self::chrbytesplit($n, 4));
     }
@@ -186,7 +186,7 @@ class Rabbit_AMQP_Serialize_Write
     {
         /**
          * Write an integer as an unsigned 64-bit value.
-         */
+        **/
         $this->flushbits();
         $this->out .= implode("", self::chrbytesplit($n, 8));
     }
@@ -196,7 +196,7 @@ class Rabbit_AMQP_Serialize_Write
         /*
          * Write a string up to 255 bytes long after encoding.
          * Assume UTF-8 encoding.
-         */
+        **/
         $this->flushbits();
 
         if (strlen($s) > 255) {
@@ -213,7 +213,7 @@ class Rabbit_AMQP_Serialize_Write
     {
         /*
          * Write a string up to 2**32 bytes long.  Assume UTF-8 encoding.
-         */
+        **/
         $this->flushbits();
         $this->write_long(strlen($s));
         $this->out .= $s;
@@ -223,7 +223,7 @@ class Rabbit_AMQP_Serialize_Write
     {
         /**
          * Write unix time_t value as 64 bit timestamp.
-         */
+        **/
         $this->write_longlong($v);
     }
 
@@ -232,7 +232,7 @@ class Rabbit_AMQP_Serialize_Write
         /**
          * Write PHP array, as table. Input array format: keys are strings,
          * values are (type,value) tuples.
-         */
+        **/
         $this->flushbits();
         $table_data = new Rabbit_AMQP_Serialize_Write();
         foreach ($d as $k => $va) {

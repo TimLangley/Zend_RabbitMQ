@@ -12,14 +12,14 @@
  * obtain it through the world-wide-web, please send an email
  * to hello@canddi.com so we can send you a copy immediately.
  *
- */
+**/
 /**
  *	@purpose			
  *
  *	@author 	Tim Langley
  *	@date		2010-09-01
  *
- */
+**/
 
 defined('ENVIRONMENT_DEVELOPMENT') 	or define('ENVIRONMENT_DEVELOPMENT','development');
 defined('ENVIRONMENT_TEST') 		or define('ENVIRONMENT_TEST',		'test');

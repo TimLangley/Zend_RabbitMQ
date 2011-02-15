@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>src/main/php/Rabbit/Queue.php</string>
+	<string>src/main/php/Rabbit/Message.php</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -40,14 +40,14 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>47</integer>
 				<key>line</key>
-				<integer>0</integer>
+				<integer>455</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>590</integer>
+			<integer>439</integer>
 		</dict>
 		<key>src/main/php/Rabbit/AMQP/Connection.php</key>
 		<dict>
@@ -119,33 +119,107 @@
 			<key>firstVisibleLine</key>
 			<integer>303</integer>
 		</dict>
+		<key>src/main/php/Rabbit/Exchange.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>21</integer>
+				<key>line</key>
+				<integer>141</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>133</integer>
+		</dict>
+		<key>src/main/php/Rabbit/Flags.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>46</integer>
+				<key>line</key>
+				<integer>97</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>76</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>35</integer>
+				<key>line</key>
+				<integer>97</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>52</integer>
+				<key>line</key>
+				<integer>97</integer>
+			</dict>
+		</dict>
 		<key>src/main/php/Rabbit/Message.php</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>1</integer>
 				<key>line</key>
-				<integer>0</integer>
+				<integer>121</integer>
 			</dict>
+			<key>columnSelection</key>
+			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>241</integer>
+			<integer>94</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>2</integer>
+				<key>line</key>
+				<integer>132</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>1</integer>
+				<key>line</key>
+				<integer>121</integer>
+			</dict>
 		</dict>
 		<key>src/main/php/Rabbit/Queue.php</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>2</integer>
+				<integer>27</integer>
 				<key>line</key>
-				<integer>13</integer>
+				<integer>157</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
+			<integer>25</integer>
+		</dict>
+		<key>src/test/php/Rabbit/MessageTest.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>51</integer>
+				<key>line</key>
+				<integer>51</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
 			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>39</integer>
 		</dict>
 		<key>src/test/realTest/consume.php</key>
 		<dict>
@@ -180,6 +254,10 @@
 	<array>
 		<string>src/main/php/Rabbit/AMQP/Channel.php</string>
 		<string>src/main/php/Rabbit/Queue.php</string>
+		<string>src/main/php/Rabbit/Flags.php</string>
+		<string>src/main/php/Rabbit/Message.php</string>
+		<string>src/test/php/Rabbit/MessageTest.php</string>
+		<string>src/main/php/Rabbit/Exchange.php</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
